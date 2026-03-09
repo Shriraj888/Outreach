@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
+import { ApiKeyInput } from "@/components/api-key-input"
 
 const purposes = [
   "Internship",
@@ -36,6 +37,7 @@ export interface FormData {
 export function CraftForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [apiKey, setApiKey] = useState("")
   const [formData, setFormData] = useState<FormData>({
     recipient: "",
     purpose: "",
@@ -45,22 +47,26 @@ export function CraftForm() {
   })
 
   const handleSubmit = async () => {
-    if (!formData.recipient || !formData.purpose || !formData.background || !formData.senderName) {
+    if (!formData.recipient || !formData.purpose || !formData.background || !formData.senderName || !apiKey) {
       return
     }
 
     setIsLoading(true)
     
-    // Store form data in sessionStorage for the results page
+    // Store form data and API key in sessionStorage for the results page
     sessionStorage.setItem("craftFormData", JSON.stringify(formData))
+    sessionStorage.setItem("craft_api_key", apiKey)
     
     router.push("/craft/results")
   }
 
-  const isValid = formData.recipient && formData.purpose && formData.background && formData.senderName
+  const isValid = formData.recipient && formData.purpose && formData.background && formData.senderName && apiKey
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-lg">
+    <div className="space-y-0">
+      <ApiKeyInput value={apiKey} onChange={setApiKey} />
+      
+      <div className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-lg">
       <FieldGroup>
         <Field>
           <FieldLabel>Who are you emailing?</FieldLabel>
@@ -141,6 +147,7 @@ export function CraftForm() {
           </>
         )}
       </button>
+      </div>
     </div>
   )
 }

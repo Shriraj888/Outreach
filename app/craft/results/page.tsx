@@ -27,8 +27,9 @@ export default function ResultsPage() {
   const [error, setError] = useState<string | null>(null)
   const [results, setResults] = useState<EmailResults | null>(null)
   const [formData, setFormData] = useState<FormData | null>(null)
+  const [apiKey, setApiKey] = useState<string | null>(null)
 
-  const generateEmails = async (data: FormData) => {
+  const generateEmails = async (data: FormData, key: string) => {
     setIsLoading(true)
     setError(null)
 
@@ -51,7 +52,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, apiKey: key }),
       })
 
       if (!response.ok) {
@@ -69,25 +70,28 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
 
   useEffect(() => {
     const storedData = sessionStorage.getItem("craftFormData")
-    if (!storedData) {
+    const storedApiKey = sessionStorage.getItem("craft_api_key")
+    
+    if (!storedData || !storedApiKey) {
       router.push("/craft")
       return
     }
 
     const data = JSON.parse(storedData) as FormData
     setFormData(data)
-    generateEmails(data)
+    setApiKey(storedApiKey)
+    generateEmails(data, storedApiKey)
   }, [router])
 
   const handleRegenerate = (style: "formal" | "casual" | "bold") => {
-    if (formData) {
-      generateEmails(formData)
+    if (formData && apiKey) {
+      generateEmails(formData, apiKey)
     }
   }
 
   const handleRetry = () => {
-    if (formData) {
-      generateEmails(formData)
+    if (formData && apiKey) {
+      generateEmails(formData, apiKey)
     }
   }
 
