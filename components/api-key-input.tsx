@@ -1,31 +1,75 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Eye, EyeOff, Key, ExternalLink } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Eye, EyeOff, Key, ExternalLink, CheckCircle2, AlertCircle, Loader2, Shield } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface ApiKeyInputProps {
   value: string
   onChange: (value: string) => void
 }
 
+type KeyStatus = "idle" | "checking" | "valid" | "invalid"
+
 export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
   const [showKey, setShowKey] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [keyStatus, setKeyStatus] = useState<KeyStatus>("idle")
+  const [keyType, setKeyType] = useState<"gemini" | "openrouter" | null>(null)
 
   useEffect(() => {
     setIsMounted(true)
-    // Load saved API key from localStorage on mount
     const savedKey = localStorage.getItem("gemini_api_key")
     if (savedKey && !value) {
       onChange(savedKey)
     }
   }, [onChange, value])
 
+  // Detect key type and auto-verify
+  useEffect(() => {
+    if (!value || value.length < 10) {
+      setKeyStatus("idle")
+      setKeyType(null)
+      return
+    }
+
+    if (value.startsWith("sk-or-")) {
+      setKeyType("openrouter")
+    } else if (value.startsWith("AIza")) {
+      setKeyType("gemini")
+    } else {
+      setKeyType(null)
+    }
+
+    // Debounced verification
+    const timer = setTimeout(async () => {
+      setKeyStatus("checking")
+      try {
+        if (value.startsWith("sk-or-")) {
+          // Verify OpenRouter key
+          const res = await fetch("https://openrouter.ai/api/v1/models", {
+            headers: { Authorization: `Bearer ${value}` },
+          })
+          setKeyStatus(res.ok ? "valid" : "invalid")
+        } else if (value.startsWith("AIza")) {
+          // Verify Gemini key with a minimal request
+          const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models?key=${value}`
+          )
+          setKeyStatus(res.ok ? "valid" : "invalid")
+        } else {
+          setKeyStatus("idle")
+        }
+      } catch {
+        setKeyStatus("invalid")
+      }
+    }, 800)
+
+    return () => clearTimeout(timer)
+  }, [value])
+
   const handleChange = (newValue: string) => {
     onChange(newValue)
-    // Persist to localStorage for convenience
     if (newValue) {
       localStorage.setItem("gemini_api_key", newValue)
     } else {
@@ -33,73 +77,134 @@ export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
     }
   }
 
-  if (!isMounted) {
-    return null
-  }
+  if (!isMounted) return null
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 mb-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-primary/10">
-          <Key className="w-5 h-5 text-primary" />
-        </div>
-        <div>
-          <h3 className="font-semibold text-foreground">API Key Required</h3>
-          <p className="text-sm text-muted-foreground">
-            Enter your Gemini or OpenRouter API key to generate emails
-          </p>
-        </div>
-      </div>
+    <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden mb-6">
+      {/* Top accent */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
 
-      <Field>
-        <FieldLabel className="flex items-center justify-between">
-          <span>Gemini or OpenRouter API Key</span>
-          <div className="flex gap-3">
+      <div className="relative p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center">
+              <Key className="w-5 h-5 text-white/60" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">API Key</h3>
+              <p className="text-xs text-white/30">Required to generate emails</p>
+            </div>
+          </div>
+          <div className="flex gap-2">
             <a
               href="https://aistudio.google.com/apikey"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+              className="text-[11px] text-white/30 hover:text-white/60 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/10 bg-white/[0.02]"
             >
-              Get Gemini key
-              <ExternalLink className="w-3 h-3" />
+              Gemini <ExternalLink className="w-2.5 h-2.5" />
             </a>
             <a
               href="https://openrouter.ai/keys"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+              className="text-[11px] text-white/30 hover:text-white/60 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/10 bg-white/[0.02]"
             >
-              Get OpenRouter key
-              <ExternalLink className="w-3 h-3" />
+              OpenRouter <ExternalLink className="w-2.5 h-2.5" />
             </a>
           </div>
-        </FieldLabel>
+        </div>
+
+        {/* Input */}
         <div className="relative">
-          <Input
+          <input
             type={showKey ? "text" : "password"}
-            placeholder="AIza..."
+            placeholder="Paste your API key here..."
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            className="bg-input border-border pr-10 font-mono text-sm"
-          />
-          <button
-            type="button"
-            onClick={() => setShowKey(!showKey)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {showKey ? (
-              <EyeOff className="w-4 h-4" />
-            ) : (
-              <Eye className="w-4 h-4" />
+            className={cn(
+              "w-full bg-white/[0.03] border rounded-xl py-3.5 px-4 pr-20 text-sm font-mono text-white/80 placeholder:text-white/20 outline-none transition-all duration-300",
+              keyStatus === "valid" && "border-emerald-500/30 focus:border-emerald-500/50",
+              keyStatus === "invalid" && "border-red-500/30 focus:border-red-500/50",
+              keyStatus === "checking" && "border-blue-500/30",
+              keyStatus === "idle" && "border-white/[0.08] focus:border-white/20"
             )}
-          </button>
+          />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            {/* Status indicator */}
+            <div className={cn(
+              "transition-all duration-300",
+              keyStatus === "idle" && "opacity-0 scale-75",
+              keyStatus !== "idle" && "opacity-100 scale-100"
+            )}>
+              {keyStatus === "checking" && (
+                <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
+              )}
+              {keyStatus === "valid" && (
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              )}
+              {keyStatus === "invalid" && (
+                <AlertCircle className="w-4 h-4 text-red-400" />
+              )}
+            </div>
+            {/* Toggle visibility */}
+            <button
+              type="button"
+              onClick={() => setShowKey(!showKey)}
+              className="text-white/20 hover:text-white/50 transition-colors p-1"
+            >
+              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
-      </Field>
 
-      <p className="text-xs text-muted-foreground mt-3">
-        Your API key is stored locally in your browser and never sent to our servers.
-      </p>
+        {/* Status message */}
+        <div className="mt-3 flex items-center justify-between">
+          <div className={cn(
+            "text-xs transition-all duration-300 flex items-center gap-1.5",
+            keyStatus === "valid" && "text-emerald-400/70",
+            keyStatus === "invalid" && "text-red-400/70",
+            keyStatus === "checking" && "text-blue-400/70",
+            keyStatus === "idle" && "text-white/20"
+          )}>
+            {keyStatus === "valid" && (
+              <>
+                <CheckCircle2 className="w-3 h-3" />
+                {keyType === "openrouter" ? "OpenRouter key verified" : "Gemini key verified"}
+              </>
+            )}
+            {keyStatus === "invalid" && (
+              <>
+                <AlertCircle className="w-3 h-3" />
+                Key verification failed. Check your key.
+              </>
+            )}
+            {keyStatus === "checking" && (
+              <>
+                <Loader2 className="w-3 h-3 animate-spin" />
+                Verifying key...
+              </>
+            )}
+            {keyStatus === "idle" && (
+              <>
+                <Shield className="w-3 h-3" />
+                Stored locally, never sent to our servers
+              </>
+            )}
+          </div>
+          {keyType && keyStatus !== "idle" && (
+            <span className={cn(
+              "text-[10px] font-mono px-2 py-0.5 rounded-md border",
+              keyType === "gemini" && "text-blue-400/60 border-blue-500/20 bg-blue-500/5",
+              keyType === "openrouter" && "text-purple-400/60 border-purple-500/20 bg-purple-500/5"
+            )}>
+              {keyType === "gemini" ? "GEMINI" : "OPENROUTER"}
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
