@@ -17,6 +17,7 @@ interface EmailVariant {
 interface EmailResults {
   formal: EmailVariant
   casual: EmailVariant
+  bold: EmailVariant
   tips: string[]
 }
 
@@ -32,7 +33,7 @@ export default function ResultsPage() {
     setIsLoading(true)
     setError(null)
 
-    const prompt = `You are an expert cold email copywriter. Generate 2 cold email variants based on this info:
+    const prompt = `You are an expert cold email copywriter. Generate 3 cold email variants based on this info:
 - Recipient: ${data.recipient}
 - Purpose: ${data.purpose}
 - Sender background: ${data.background}
@@ -43,6 +44,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
 {
   "formal": { "subject": "...", "body": "..." },
   "casual": { "subject": "...", "body": "..." },
+  "bold": { "subject": "...", "body": "..." },
   "tips": ["tip1", "tip2", "tip3"]
 }`
 
@@ -83,7 +85,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
     generateEmails(data, storedApiKey)
   }, [router])
 
-  const handleRegenerate = (style: "formal" | "casual") => {
+  const handleRegenerate = (style: "formal" | "casual" | "bold") => {
     if (formData && apiKey) {
       generateEmails(formData, apiKey)
     }
@@ -135,7 +137,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
           </div>
         ) : results ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <EmailCard
                 style="formal"
                 label="Formal"
@@ -151,6 +153,14 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
                 subject={results.casual.subject}
                 body={results.casual.body}
                 onRegenerate={() => handleRegenerate("casual")}
+              />
+              <EmailCard
+                style="bold"
+                label="Bold"
+                color="orange"
+                subject={results.bold.subject}
+                body={results.bold.body}
+                onRegenerate={() => handleRegenerate("bold")}
               />
             </div>
 

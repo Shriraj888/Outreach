@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       try {
         const result = await generateText({
           model,
-          prompt: prompt + `\n\nIMPORTANT: Return ONLY a valid JSON object. No markdown, no code fences, no explanation. Just the raw JSON object with keys: formal, casual, tips.`,
+          prompt: prompt + `\n\nIMPORTANT: Return ONLY a valid JSON object. No markdown, no code fences, no explanation. Just the raw JSON object with keys: formal, casual, bold, tips.`,
         })
 
         const text = result.text
@@ -82,10 +82,13 @@ export async function POST(request: NextRequest) {
           parsed &&
           parsed.formal &&
           parsed.casual &&
+          parsed.bold &&
           parsed.formal.subject &&
           parsed.formal.body &&
           parsed.casual.subject &&
-          parsed.casual.body
+          parsed.casual.body &&
+          parsed.bold.subject &&
+          parsed.bold.body
         ) {
           // Ensure tips is an array
           if (!Array.isArray(parsed.tips)) {
