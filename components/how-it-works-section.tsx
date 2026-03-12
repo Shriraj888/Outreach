@@ -49,31 +49,31 @@ const steps = [
 
 const colorMap = {
   blue: {
-    iconBg: "bg-blue-500/[0.08] border-blue-500/20",
-    iconText: "text-blue-500",
-    numberBg: "bg-blue-500/[0.08] text-blue-500",
+    iconBg: "bg-blue-500/[0.12] border-blue-500/25",
+    iconText: "text-blue-400",
+    numberBg: "bg-blue-500/[0.12] text-blue-400",
     dotBg: "bg-blue-500",
     cardHover: "hover:border-blue-500/30",
-    glowBg: "from-blue-500/20 via-blue-500/5 to-transparent",
-    previewCheck: "text-white/10 group-hover:text-blue-500/60 transition-colors",
+    glowBg: "from-blue-500/15 via-blue-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-blue-400 transition-colors",
   },
   purple: {
-    iconBg: "bg-purple-500/[0.08] border-purple-500/20",
+    iconBg: "bg-purple-500/[0.12] border-purple-500/25",
     iconText: "text-purple-400",
-    numberBg: "bg-purple-500/[0.08] text-purple-400",
+    numberBg: "bg-purple-500/[0.12] text-purple-400",
     dotBg: "bg-purple-500",
     cardHover: "hover:border-purple-500/30",
-    glowBg: "from-purple-500/20 via-purple-500/5 to-transparent",
-    previewCheck: "text-white/10 group-hover:text-purple-400/60 transition-colors",
+    glowBg: "from-purple-500/15 via-purple-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-purple-400 transition-colors",
   },
   emerald: {
-    iconBg: "bg-emerald-500/[0.08] border-emerald-500/20",
+    iconBg: "bg-emerald-500/[0.12] border-emerald-500/25",
     iconText: "text-emerald-400",
-    numberBg: "bg-emerald-500/[0.08] text-emerald-400",
+    numberBg: "bg-emerald-500/[0.12] text-emerald-400",
     dotBg: "bg-emerald-500",
     cardHover: "hover:border-emerald-500/30",
-    glowBg: "from-emerald-500/20 via-emerald-500/5 to-transparent",
-    previewCheck: "text-white/10 group-hover:text-emerald-400/60 transition-colors",
+    glowBg: "from-emerald-500/15 via-emerald-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-emerald-400 transition-colors",
   },
 }
 
@@ -128,19 +128,19 @@ export function HowItWorksSection() {
   }, { scope: container });
 
   return (
-    <section id="how-it-works" ref={container} className="relative py-32 sm:py-40 px-4 bg-[#020202] overflow-hidden">
+    <section id="how-it-works" ref={container} className="relative py-32 sm:py-40 px-4 overflow-hidden">
       
       <div className="relative z-10 max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="text-center mb-24">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] mb-8 shadow-sm">
-            <ArrowRight className="w-3.5 h-3.5 text-white/40" />
-            <span className="text-sm font-medium text-white/50">How It Works</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.04] mb-8 shadow-sm">
+            <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+            <span className="text-sm font-medium text-gray-400">How It Works</span>
           </div>
           <h2 className="hiw-title text-5xl sm:text-6xl lg:text-7xl font-semibold text-white mb-6 tracking-tight">
-            Three Steps. <span className="text-white/70">Zero Friction.</span>
+            Three Steps. <span className="text-gray-600">Zero Friction.</span>
           </h2>
-          <p className="hiw-subtitle text-lg sm:text-xl text-white/40 max-w-xl mx-auto font-light">
+          <p className="hiw-subtitle text-lg sm:text-xl text-gray-500 max-w-xl mx-auto font-light">
             From blank page to inbox-ready email in under 30 seconds.
           </p>
         </div>
@@ -159,9 +159,9 @@ export function HowItWorksSection() {
               <div
                 key={step.step}
                 className={cn(
-                  "step-card group relative rounded-[28px] border border-white/5 bg-[#0a0a0a] overflow-hidden transition-all duration-500 z-10",
+                  "step-card group relative rounded-[28px] border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden transition-all duration-500 z-10",
                   colors.cardHover,
-                  isActive && "border-white/10"
+                  isActive && "border-white/[0.12]"
                 )}
                 onMouseEnter={() => setActiveStep(index)}
                 onMouseLeave={() => setActiveStep(null)}
@@ -191,18 +191,18 @@ export function HowItWorksSection() {
                     <h3 className="text-[22px] font-bold text-white mb-3 tracking-tight group-hover:text-white transition-colors">
                       {step.title}
                     </h3>
-                    <p className="text-[15px] text-white/40 leading-[1.6] font-light group-hover:text-white/50 transition-colors">
+                    <p className="text-[15px] text-gray-500 leading-[1.6] font-light group-hover:text-gray-400 transition-colors">
                       {step.description}
                     </p>
                   </div>
 
                   {/* Inner Input Preview Container */}
                   <div className="mt-auto">
-                    <div className="rounded-[20px] border border-white/5 bg-black/40 p-5 group-hover:bg-black/60 group-hover:border-white/10 transition-all duration-500">
+                    <div className="rounded-[20px] border border-white/[0.06] bg-white/[0.03] p-5 group-hover:bg-white/[0.06] group-hover:border-white/[0.1] transition-all duration-500">
                       
                       <div className="flex items-center gap-2.5 mb-4">
                         <div className={cn("w-1.5 h-1.5 rounded-full", colors.dotBg, isActive ? "animate-pulse" : "opacity-50")} />
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-bold">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">
                           {step.preview.label}
                         </span>
                       </div>
@@ -211,7 +211,7 @@ export function HowItWorksSection() {
                         {step.preview.items.map((item, i) => (
                           <div
                             key={i}
-                            className="flex items-center gap-3 text-[13px] text-white/40 font-medium group-hover:text-white/60 transition-colors duration-500"
+                            className="flex items-center gap-3 text-[13px] text-gray-500 font-medium group-hover:text-gray-300 transition-colors duration-500"
                           >
                             <CheckCircle2 className={cn("w-3.5 h-3.5 flex-shrink-0", colors.previewCheck)} />
                             <span className="truncate">{item}</span>

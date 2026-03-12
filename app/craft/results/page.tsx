@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, RefreshCw, AlertCircle, Sparkles } from "lucide-react"
+import { toast } from "sonner"
 import { EmailCard } from "@/components/email-card"
-import { ShimmerCards } from "@/components/shimmer-cards"
+import { GeneratingLoader } from "@/components/generating-loader"
 import { ProTips } from "@/components/pro-tips"
 import type { FormData } from "@/components/craft-form"
 
@@ -28,6 +29,7 @@ export default function ResultsPage() {
   const [results, setResults] = useState<EmailResults | null>(null)
   const [formData, setFormData] = useState<FormData | null>(null)
   const [apiKey, setApiKey] = useState<string | null>(null)
+  const [regenerating, setRegenerating] = useState<Record<string, boolean>>({})
 
   const generateEmails = async (data: FormData, key: string) => {
     setIsLoading(true)
@@ -84,9 +86,55 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
     generateEmails(data, storedApiKey)
   }, [router])
 
-  const handleRegenerate = (style: "formal" | "casual" | "bold") => {
-    if (formData && apiKey) {
-      generateEmails(formData, apiKey)
+  const handleRegenerate = async (style: "formal" | "casual" | "bold") => {
+    if (!formData || !apiKey || regenerating[style]) return
+
+    setRegenerating((prev) => ({ ...prev, [style]: true }))
+
+    const styleDescriptions = {
+      formal: "formal and professional",
+      casual: "casual and friendly",
+      bold: "bold and attention-grabbing",
+    }
+
+    const prompt = `You are an expert cold email copywriter. Generate exactly 1 ${styleDescriptions[style]} cold email variant based on this info:
+- Recipient: ${formData.recipient}
+- Purpose: ${formData.purpose}
+- Sender background: ${formData.background}
+- Recipient name: ${formData.recipientName || "the recipient"}
+- Sender name: ${formData.senderName}
+
+Return ONLY a JSON object in this exact format, no markdown, no extra text:
+{ "subject": "...", "body": "..." }`
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, apiKey, singleStyle: true }),
+      })
+
+      const responseData = await response.json()
+
+      if (!response.ok) {
+        throw new Error(responseData.error || "Failed to regenerate email")
+      }
+
+      setResults((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          [style]: {
+            subject: responseData.subject,
+            body: responseData.body,
+          },
+        }
+      })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Regeneration failed"
+      toast.error(message)
+    } finally {
+      setRegenerating((prev) => ({ ...prev, [style]: false }))
     }
   }
 
@@ -97,18 +145,17 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
   }
 
   return (
-    <main className="min-h-screen bg-black py-8 px-4 sm:px-6 overflow-hidden">
+    <main className="min-h-screen py-8 px-4 sm:px-6 overflow-hidden">
       {/* Background effects */}
-      <div className="fixed inset-0 -z-10 bg-black">
+      <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-grid opacity-10" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-white/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Navigation */}
         <Link
           href="/craft"
-          className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors duration-300 mb-10 group"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors duration-300 mb-10 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
           Back to Editor
@@ -116,30 +163,32 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
 
         {/* Header */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] mb-6">
-            <Sparkles className="w-4 h-4 text-white/60" />
-            <span className="text-sm font-medium text-white/60">AI Generated</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.04] mb-6">
+            <Sparkles className="w-4 h-4 text-gray-400" />
+            <span className="text-sm font-medium text-gray-400">AI Generated</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-medium text-white mb-4 tracking-tight">
             Your Cold Emails
           </h1>
-          <p className="text-white/40 text-lg font-light">
+          <p className="text-gray-500 text-lg font-light">
             Three distinct approaches. Pick the one that resonates.
           </p>
         </div>
 
         {isLoading ? (
-          <ShimmerCards />
+          <div className="flex items-center justify-center py-32">
+            <GeneratingLoader size="default" />
+          </div>
         ) : error ? (
           <div className="text-center py-20">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 mb-6">
-              <AlertCircle className="w-7 h-7 text-red-400" />
+              <AlertCircle className="w-7 h-7 text-red-500" />
             </div>
-            <p className="text-red-400/80 mb-2 text-lg font-medium">Generation Failed</p>
-            <p className="text-white/40 mb-8 max-w-md mx-auto text-sm">{error}</p>
+            <p className="text-red-400 mb-2 text-lg font-medium">Generation Failed</p>
+            <p className="text-gray-500 mb-8 max-w-md mx-auto text-sm">{error}</p>
             <button
               onClick={handleRetry}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/[0.06] text-white border border-white/10 hover:bg-white/[0.1] hover:border-white/20 transition-all duration-300"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/[0.06] text-white border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] transition-all duration-300"
             >
               <RefreshCw className="w-4 h-4" />
               Try Again
@@ -154,6 +203,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
                 color="blue"
                 subject={results.formal.subject}
                 body={results.formal.body}
+                isRegenerating={regenerating.formal}
                 onRegenerate={() => handleRegenerate("formal")}
               />
               <EmailCard
@@ -162,6 +212,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
                 color="green"
                 subject={results.casual.subject}
                 body={results.casual.body}
+                isRegenerating={regenerating.casual}
                 onRegenerate={() => handleRegenerate("casual")}
               />
               <EmailCard
@@ -170,6 +221,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
                 color="orange"
                 subject={results.bold.subject}
                 body={results.bold.body}
+                isRegenerating={regenerating.bold}
                 onRegenerate={() => handleRegenerate("bold")}
               />
             </div>

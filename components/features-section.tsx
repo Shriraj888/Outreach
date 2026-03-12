@@ -107,7 +107,7 @@ export function FeaturesSection() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="relative py-32 sm:py-40 bg-[#020202] overflow-hidden perspective-1000">
+    <section ref={container} className="relative py-32 sm:py-40 overflow-hidden perspective-1000">
       
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-grid opacity-[0.03]" />
@@ -117,14 +117,14 @@ export function FeaturesSection() {
         
         {/* Header Section */}
         <div className="text-center mb-20 sm:mb-24 flex flex-col items-center">
-          <div className="feature-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 mb-8 opacity-0">
-            <Sparkles className="w-3.5 h-3.5 text-white/40" />
-            <span className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-[0.2em]">Bento Masterpiece</span>
+          <div className="feature-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] mb-8 opacity-0">
+            <Sparkles className="w-3.5 h-3.5 text-gray-500" />
+            <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Bento Masterpiece</span>
           </div>
           
           <h2 className="feature-title text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-semibold tracking-[-0.03em] text-white leading-[1.05] flex flex-col items-center justify-center">
             <span className="block transform-gpu origin-bottom opacity-0 mb-1 lg:mb-2">Beyond templates.</span>
-            <span className="block text-white/30 transform-gpu origin-bottom opacity-0">Engineered for responses.</span>
+            <span className="block text-gray-600 transform-gpu origin-bottom opacity-0">Engineered for responses.</span>
           </h2>
         </div>
 
@@ -132,20 +132,20 @@ export function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
           
           {/* Card 1: Context Engine (Span 2) */}
-          <div className="bento-card relative md:col-span-2 group rounded-[28px] bg-[#050505] border border-white/5 overflow-hidden transform-gpu opacity-0">
-            <div className="spotlight-effect absolute w-[500px] h-[500px] bg-purple-500/[0.04] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/5" />
+          <div className="bento-card relative md:col-span-2 group rounded-[28px] bg-white/[0.03] border border-white/[0.06] overflow-hidden transform-gpu opacity-0 backdrop-blur-xl">
+            <div className="spotlight-effect absolute w-[500px] h-[500px] bg-purple-500/[0.06] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
             {/* Visual Header Graphic */}
-            <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-purple-500/[0.03] to-transparent flex items-center justify-center border-b border-white/[0.02]">
-              <div className="w-[80%] max-w-[420px] rounded-xl border border-white/10 bg-[#0a0a0a] shadow-2xl overflow-hidden font-mono text-[11px] sm:text-xs z-10 group-hover:-translate-y-2 transition-transform duration-500">
-                <div className="flex items-center px-4 py-2 border-b border-white/5 bg-white/[0.03]">
+            <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-purple-500/[0.08] to-transparent flex items-center justify-center border-b border-white/[0.04]">
+              <div className="w-[80%] max-w-[420px] rounded-xl border border-white/[0.08] bg-gray-900 shadow-2xl overflow-hidden font-mono text-[11px] sm:text-xs z-10 group-hover:-translate-y-2 transition-transform duration-500">
+                <div className="flex items-center px-4 py-2 border-b border-white/10 bg-white/[0.05]">
                   <div className="flex gap-1.5 ">
                     <div className="w-2.5 h-2.5 rounded-full bg-rose-500/50"/><div className="w-2.5 h-2.5 rounded-full bg-amber-500/50"/><div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50"/>
                   </div>
                   <span className="ml-4 text-white/30 truncate hidden sm:block">ai_context_engine.ts</span>
                 </div>
-                <div className="p-4 space-y-2 text-white/50 bg-[#050505]/50">
+                <div className="p-4 space-y-2 text-white/50 bg-gray-950/50">
                   <div><span className="text-purple-400">const</span> <span className="text-blue-400">payload</span> = <span className="text-amber-300">await</span> <span className="text-cyan-400">analyzeTarget</span>({`{`}</div>
                   <div className="pl-4"><span className="text-white/80">"recipient"</span>: <span className="text-emerald-400">"CTO @ Fintech Startup"</span>,</div>
                   <div className="pl-4"><span className="text-white/80">"intent"</span>: <span className="text-emerald-400">"Demo Meeting"</span>,</div>
@@ -157,76 +157,76 @@ export function FeaturesSection() {
 
             {/* Content Bottom */}
             <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-purple-500/[0.05] border border-purple-500/10 flex items-center justify-center mb-6 shadow-inner group-hover:bg-purple-500/[0.08] transition-colors">
+              <div className="w-12 h-12 rounded-[14px] bg-purple-500/[0.12] border border-purple-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-purple-500/[0.18] transition-colors">
                 <BrainCircuit className="w-[18px] h-[18px] text-purple-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white/90 mb-3 tracking-tight">Deep Context Analysis</h3>
-              <p className="text-white/40 leading-[1.6] text-[15px] font-light max-w-sm">We don't use fill-in-the-blank templates. Our engine fully understands the nuance of your target and objective to write a bespoke draft.</p>
+              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Deep Context Analysis</h3>
+              <p className="text-gray-500 leading-[1.6] text-[15px] font-light max-w-sm">We don't use fill-in-the-blank templates. Our engine fully understands the nuance of your target and objective to write a bespoke draft.</p>
             </div>
           </div>
 
           {/* Card 2: Deliverability Shield (Span 1) */}
-          <div className="bento-card relative md:col-span-1 group rounded-[28px] bg-[#050505] border border-white/5 overflow-hidden transform-gpu opacity-0">
-            <div className="spotlight-effect absolute w-[350px] h-[350px] bg-emerald-500/[0.06] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/5" />
+          <div className="bento-card relative md:col-span-1 group rounded-[28px] bg-white/[0.03] border border-white/[0.06] overflow-hidden transform-gpu opacity-0 backdrop-blur-xl">
+            <div className="spotlight-effect absolute w-[350px] h-[350px] bg-emerald-500/[0.08] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
             {/* Visual Graphic */}
-            <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/[0.05] to-transparent">
+            <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/[0.08] to-transparent">
               <div className="relative w-32 h-32 score-container z-10 group-hover:scale-105 transition-transform duration-500">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="6" fill="none" className="text-white/[0.03]" />
+                  <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="6" fill="none" className="text-white/[0.06]" />
                   <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="6" fill="none" className="text-emerald-500 score-ring drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]" strokeDasharray="283" strokeDashoffset="283" strokeLinecap="round" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center flex-col shadow-inner">
-                  <span className="text-3xl font-bold text-white tracking-tighter drop-shadow-md"><span className="score-num">0</span><span className="text-emerald-500/80 text-xl">%</span></span>
+                  <span className="text-3xl font-bold text-white tracking-tighter drop-shadow-md"><span className="score-num">0</span><span className="text-emerald-400 text-xl">%</span></span>
                 </div>
               </div>
             </div>
 
             <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-emerald-500/[0.05] border border-emerald-500/10 flex items-center justify-center mb-6 shadow-inner group-hover:bg-emerald-500/[0.08] transition-colors">
+              <div className="w-12 h-12 rounded-[14px] bg-emerald-500/[0.12] border border-emerald-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-emerald-500/[0.18] transition-colors">
                 <ShieldCheck className="w-[18px] h-[18px] text-emerald-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white/90 mb-3 tracking-tight">Always Land</h3>
-              <p className="text-white/40 leading-[1.6] text-[15px] font-light">Built-in deliverability checks strip out algorithmic spam triggers instantly.</p>
+              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Always Land</h3>
+              <p className="text-gray-500 leading-[1.6] text-[15px] font-light">Built-in deliverability checks strip out algorithmic spam triggers instantly.</p>
             </div>
           </div>
 
           {/* Card 3: Dynamic Tone Calibrator (Span 1) */}
-          <div className="bento-card relative md:col-span-1 group rounded-[28px] bg-[#050505] border border-white/5 overflow-hidden transform-gpu opacity-0">
-            <div className="spotlight-effect absolute w-[350px] h-[350px] bg-blue-500/[0.06] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/5" />
+          <div className="bento-card relative md:col-span-1 group rounded-[28px] bg-white/[0.03] border border-white/[0.06] overflow-hidden transform-gpu opacity-0 backdrop-blur-xl">
+            <div className="spotlight-effect absolute w-[350px] h-[350px] bg-blue-500/[0.08] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
             <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center tone-container z-10">
               <div className="flex flex-col gap-3 w-full px-10">
-                <div style={{"--glow-color": "rgba(59,130,246,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
-                  FORMAL <div className="w-2 h-2 rounded-full bg-blue-400 mix-blend-screen shadow-[0_0_10px_rgba(96,165,250,0.8)]"/>
+                <div style={{"--glow-color": "rgba(59,130,246,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-blue-500/30 bg-blue-500/10 text-blue-600 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
+                  FORMAL <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"/>
                 </div>
-                <div style={{"--glow-color": "rgba(236,72,153,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
-                  BOLD <div className="w-2 h-2 rounded-full bg-pink-400 mix-blend-screen shadow-[0_0_10px_rgba(244,114,182,0.8)]"/>
+                <div style={{"--glow-color": "rgba(236,72,153,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-pink-500/30 bg-pink-500/10 text-pink-600 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
+                  BOLD <div className="w-2 h-2 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.5)]"/>
                 </div>
-                <div style={{"--glow-color": "rgba(245,158,11,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-amber-500/30 bg-amber-500/10 text-amber-500 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
-                  CASUAL <div className="w-2 h-2 rounded-full bg-amber-400 mix-blend-screen shadow-[0_0_10px_rgba(251,191,36,0.8)]"/>
+                <div style={{"--glow-color": "rgba(245,158,11,0.3)"} as any} className="tone-pill px-4 py-3 rounded-[14px] border border-amber-500/30 bg-amber-500/10 text-amber-600 text-xs sm:text-sm font-semibold flex justify-between items-center opacity-30 box-shadow-[0_0_0_0_transparent] transition-all duration-300">
+                  CASUAL <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"/>
                 </div>
               </div>
             </div>
 
             <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-blue-500/[0.05] border border-blue-500/10 flex items-center justify-center mb-6 shadow-inner group-hover:bg-blue-500/[0.08] transition-colors">
+              <div className="w-12 h-12 rounded-[14px] bg-blue-500/[0.12] border border-blue-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-blue-500/[0.18] transition-colors">
                 <SlidersHorizontal className="w-[18px] h-[18px] text-blue-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white/90 mb-3 tracking-tight">Adaptive Tones</h3>
-              <p className="text-white/40 leading-[1.6] text-[15px] font-light">Calibrate the phrasing to match your recipient's expectation precisely.</p>
+              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Adaptive Tones</h3>
+              <p className="text-gray-500 leading-[1.6] text-[15px] font-light">Calibrate the phrasing to match your recipient's expectation precisely.</p>
             </div>
           </div>
 
           {/* Card 4: Hyper-Personalized Tags (Span 2) */}
-          <div className="bento-card relative md:col-span-2 group rounded-[28px] bg-[#050505] border border-white/5 overflow-hidden transform-gpu opacity-0">
-            <div className="spotlight-effect absolute w-[500px] h-[500px] bg-cyan-500/[0.04] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/5" />
+          <div className="bento-card relative md:col-span-2 group rounded-[28px] bg-white/[0.03] border border-white/[0.06] overflow-hidden transform-gpu opacity-0 backdrop-blur-xl">
+            <div className="spotlight-effect absolute w-[500px] h-[500px] bg-cyan-500/[0.06] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
-            <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center z-10 border-b border-white/[0.02]">
-              <div className="w-[85%] max-w-[500px] p-5 sm:p-6 rounded-[18px] border border-white/10 bg-[#0a0a0a] flex flex-col gap-4 font-medium text-[13px] sm:text-sm text-white/30 leading-relaxed shadow-2xl group-hover:scale-[1.03] transition-transform duration-500">
+            <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center z-10 border-b border-white/[0.04]">
+              <div className="w-[85%] max-w-[500px] p-5 sm:p-6 rounded-[18px] border border-white/[0.08] bg-gray-900 flex flex-col gap-4 font-medium text-[13px] sm:text-sm text-white/60 leading-relaxed shadow-2xl group-hover:scale-[1.03] transition-transform duration-500">
                 <p>Hi <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]">{'{{'}FirstName{'}}'}</span>,</p>
                 <p>I noticed your recent launch of <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-purple-300 bg-purple-500/10 border border-purple-500/20 drop-shadow-[0_0_10px_rgba(192,132,252,0.2)]">{'{{'}Recent_Product{'}}'}</span>. <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-amber-300 bg-amber-500/10 border border-amber-500/20 drop-shadow-[0_0_10px_rgba(252,211,77,0.2)]">{'{{'}Icebreaker_Compliment{'}}'}</span></p>
                 <p>Are you open to a quick chat about scaling your outreach infrastructure?</p>
@@ -234,11 +234,11 @@ export function FeaturesSection() {
             </div>
 
             <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-cyan-500/[0.05] border border-cyan-500/10 flex items-center justify-center mb-6 shadow-inner group-hover:bg-cyan-500/[0.08] transition-colors">
+              <div className="w-12 h-12 rounded-[14px] bg-cyan-500/[0.12] border border-cyan-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-cyan-500/[0.18] transition-colors">
                 <Terminal className="w-[18px] h-[18px] text-cyan-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white/90 mb-3 tracking-tight">Hyper-Personalized Tags</h3>
-              <p className="text-white/40 leading-[1.6] text-[15px] font-light max-w-sm">Inject custom attributes and AI-generated icebreakers effortlessly.</p>
+              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Hyper-Personalized Tags</h3>
+              <p className="text-gray-500 leading-[1.6] text-[15px] font-light max-w-sm">Inject custom attributes and AI-generated icebreakers effortlessly.</p>
             </div>
           </div>
 

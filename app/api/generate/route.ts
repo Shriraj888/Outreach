@@ -43,7 +43,7 @@ const MAX_RETRIES = 3
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, apiKey } = await request.json()
+    const { prompt, apiKey, singleStyle } = await request.json()
 
     if (!apiKey) {
       return NextResponse.json(
@@ -72,11 +72,24 @@ export async function POST(request: NextRequest) {
       try {
         const result = await generateText({
           model,
-          prompt: prompt + `\n\nIMPORTANT: Return ONLY a valid JSON object. No markdown, no code fences, no explanation. Just the raw JSON object with keys: formal, casual, bold, tips.`,
+          prompt: singleStyle
+            ? prompt + `\n\nIMPORTANT: Return ONLY a valid JSON object. No markdown, no code fences, no explanation. Just the raw JSON object with keys: subject, body.`
+            : prompt + `\n\nIMPORTANT: Return ONLY a valid JSON object. No markdown, no code fences, no explanation. Just the raw JSON object with keys: formal, casual, bold, tips.`,
         })
 
         const text = result.text
         const parsed = extractJSON(text)
+
+        // Single style regeneration
+        if (singleStyle) {
+          if (parsed && parsed.subject && parsed.body) {
+            return NextResponse.json(parsed)
+          }
+          lastError = new Error("AI response was not valid JSON for single style. Raw: " + text.substring(0, 200))
+          continue
+        }
+
+        // Full generation (all 3 styles)
 
         if (
           parsed &&

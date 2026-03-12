@@ -89,9 +89,9 @@ export function CraftForm() {
     <div className="space-y-6">
       <ApiKeyInput value={apiKey} onChange={setApiKey} />
 
-      <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+      <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden">
         {/* Top accent */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Progress bar */}
         <div className="absolute inset-x-0 top-0 h-[2px]">
@@ -108,14 +108,14 @@ export function CraftForm() {
             <div className="flex items-center gap-2 mb-2.5">
               <Target className={cn(
                 "w-4 h-4 transition-colors duration-300",
-                formData.recipient ? "text-emerald-400" : "text-white/20"
+                formData.recipient ? "text-emerald-400" : "text-gray-500"
               )} />
-              <label className="text-sm font-medium text-white/70">Who are you emailing?</label>
+              <label className="text-sm font-medium text-gray-300">Who are you emailing?</label>
               {touched.recipient && !formData.recipient && (
-                <span className="text-[11px] text-red-400/70 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
+                <span className="text-[11px] text-red-500 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
               )}
               {formData.recipient && (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400/60 ml-auto animate-in fade-in zoom-in duration-300" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 ml-auto animate-in fade-in zoom-in duration-300" />
               )}
             </div>
             <input
@@ -124,12 +124,12 @@ export function CraftForm() {
               onChange={(e) => setFormData({ ...formData, recipient: e.target.value })}
               onBlur={() => handleBlur("recipient")}
               className={cn(
-                "w-full bg-white/[0.03] border rounded-xl py-3.5 px-4 text-sm text-white/80 placeholder:text-white/15 outline-none transition-all duration-300",
+                "w-full bg-white/[0.06] border rounded-xl py-3.5 px-4 text-sm text-white placeholder:text-gray-500 outline-none transition-all duration-300",
                 touched.recipient && !formData.recipient
                   ? "border-red-500/30 focus:border-red-500/40"
                   : formData.recipient
-                    ? "border-emerald-500/20 focus:border-emerald-500/30"
-                    : "border-white/[0.06] focus:border-white/15"
+                    ? "border-emerald-500/25 focus:border-emerald-500/35"
+                    : "border-white/[0.08] focus:border-white/[0.15]"
               )}
             />
           </div>
@@ -139,14 +139,14 @@ export function CraftForm() {
             <div className="flex items-center gap-2 mb-2.5">
               <MessageSquare className={cn(
                 "w-4 h-4 transition-colors duration-300",
-                formData.purpose ? "text-emerald-400" : "text-white/20"
+                formData.purpose ? "text-emerald-400" : "text-gray-500"
               )} />
-              <label className="text-sm font-medium text-white/70">What do you want?</label>
+              <label className="text-sm font-medium text-gray-300">What do you want?</label>
               {touched.purpose && !formData.purpose && (
-                <span className="text-[11px] text-red-400/70 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
+                <span className="text-[11px] text-red-500 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
               )}
               {formData.purpose && (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400/60 ml-auto animate-in fade-in zoom-in duration-300" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 ml-auto animate-in fade-in zoom-in duration-300" />
               )}
             </div>
             <Select
@@ -157,18 +157,18 @@ export function CraftForm() {
               }}
             >
               <SelectTrigger className={cn(
-                "w-full bg-white/[0.03] border rounded-xl py-3.5 px-4 text-sm text-white/80 outline-none transition-all duration-300 h-auto",
+                "w-full bg-white/[0.06] border rounded-xl py-3.5 px-4 text-sm text-white outline-none transition-all duration-300 h-auto",
                 touched.purpose && !formData.purpose
                   ? "border-red-500/30"
                   : formData.purpose
-                    ? "border-emerald-500/20"
-                    : "border-white/[0.06]"
+                    ? "border-emerald-500/25"
+                    : "border-white/[0.08]"
               )}>
                 <SelectValue placeholder="Select your purpose" />
               </SelectTrigger>
-              <SelectContent className="bg-[#111] border-white/10 rounded-xl">
+              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/[0.1] rounded-xl">
                 {purposes.map((purpose) => (
-                  <SelectItem key={purpose.value} value={purpose.value} className="text-white/70 focus:text-white focus:bg-white/[0.06] rounded-lg">
+                  <SelectItem key={purpose.value} value={purpose.value} className="text-gray-300 focus:text-white focus:bg-white/[0.06] rounded-lg">
                     <span className="flex items-center gap-2">
                       <span>{purpose.icon}</span>
                       {purpose.value}
@@ -184,14 +184,14 @@ export function CraftForm() {
             <div className="flex items-center gap-2 mb-2.5">
               <UserCheck className={cn(
                 "w-4 h-4 transition-colors duration-300",
-                formData.background ? "text-emerald-400" : "text-white/20"
+                formData.background ? "text-emerald-400" : "text-gray-500"
               )} />
-              <label className="text-sm font-medium text-white/70">Why should they care?</label>
+              <label className="text-sm font-medium text-gray-300">Why should they care?</label>
               {touched.background && !formData.background && (
-                <span className="text-[11px] text-red-400/70 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
+                <span className="text-[11px] text-red-500 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
               )}
               {formData.background && (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400/60 ml-auto animate-in fade-in zoom-in duration-300" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 ml-auto animate-in fade-in zoom-in duration-300" />
               )}
             </div>
             <textarea
@@ -200,16 +200,16 @@ export function CraftForm() {
               onChange={(e) => setFormData({ ...formData, background: e.target.value })}
               onBlur={() => handleBlur("background")}
               className={cn(
-                "w-full bg-white/[0.03] border rounded-xl py-3.5 px-4 text-sm text-white/80 placeholder:text-white/15 outline-none transition-all duration-300 min-h-[120px] resize-none",
+                "w-full bg-white/[0.06] border rounded-xl py-3.5 px-4 text-sm text-white placeholder:text-gray-500 outline-none transition-all duration-300 min-h-[120px] resize-none",
                 touched.background && !formData.background
                   ? "border-red-500/30 focus:border-red-500/40"
                   : formData.background
-                    ? "border-emerald-500/20 focus:border-emerald-500/30"
-                    : "border-white/[0.06] focus:border-white/15"
+                    ? "border-emerald-500/25 focus:border-emerald-500/35"
+                    : "border-white/[0.08] focus:border-white/[0.15]"
               )}
             />
             {formData.background && (
-              <p className="text-[11px] text-white/20 mt-1.5 text-right animate-in fade-in duration-300">
+              <p className="text-[11px] text-gray-400 mt-1.5 text-right animate-in fade-in duration-300">
                 {formData.background.length} characters
               </p>
             )}
@@ -220,16 +220,16 @@ export function CraftForm() {
             {/* Field 4: Recipient Name */}
             <div className="group">
               <div className="flex items-center gap-2 mb-2.5">
-                <User className="w-4 h-4 text-white/20" />
-                <label className="text-sm font-medium text-white/70">
-                  Recipient name <span className="text-white/20 font-normal">(optional)</span>
+                <User className="w-4 h-4 text-gray-500" />
+                <label className="text-sm font-medium text-gray-300">
+                  Recipient name <span className="text-gray-500 font-normal">(optional)</span>
                 </label>
               </div>
               <input
                 placeholder="e.g. Rahul"
                 value={formData.recipientName}
                 onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
-                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl py-3.5 px-4 text-sm text-white/80 placeholder:text-white/15 outline-none transition-all duration-300 focus:border-white/15"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl py-3.5 px-4 text-sm text-white placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-white/[0.15]"
               />
             </div>
 
@@ -238,11 +238,11 @@ export function CraftForm() {
               <div className="flex items-center gap-2 mb-2.5">
                 <User className={cn(
                   "w-4 h-4 transition-colors duration-300",
-                  formData.senderName ? "text-emerald-400" : "text-white/20"
+                  formData.senderName ? "text-emerald-400" : "text-gray-500"
                 )} />
-                <label className="text-sm font-medium text-white/70">Your name</label>
+                <label className="text-sm font-medium text-gray-300">Your name</label>
                 {touched.senderName && !formData.senderName && (
-                  <span className="text-[11px] text-red-400/70 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
+                  <span className="text-[11px] text-red-500 ml-auto animate-in fade-in slide-in-from-right-2 duration-300">Required</span>
                 )}
               </div>
               <input
@@ -251,12 +251,12 @@ export function CraftForm() {
                 onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
                 onBlur={() => handleBlur("senderName")}
                 className={cn(
-                  "w-full bg-white/[0.03] border rounded-xl py-3.5 px-4 text-sm text-white/80 placeholder:text-white/15 outline-none transition-all duration-300",
+                  "w-full bg-white/[0.06] border rounded-xl py-3.5 px-4 text-sm text-white placeholder:text-gray-500 outline-none transition-all duration-300",
                   touched.senderName && !formData.senderName
                     ? "border-red-500/30 focus:border-red-500/40"
                     : formData.senderName
-                      ? "border-emerald-500/20 focus:border-emerald-500/30"
-                      : "border-white/[0.06] focus:border-white/15"
+                      ? "border-emerald-500/25 focus:border-emerald-500/35"
+                      : "border-white/[0.08] focus:border-white/[0.15]"
                 )}
               />
             </div>
@@ -269,8 +269,8 @@ export function CraftForm() {
             className={cn(
               "w-full mt-4 flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-medium text-sm transition-all duration-500 border active:scale-[0.98]",
               isValid
-                ? "bg-white text-black border-white/80 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)] hover:scale-[1.01]"
-                : "bg-white/[0.04] text-white/30 border-white/[0.06] cursor-not-allowed"
+                ? "bg-white text-gray-900 border-white/80 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.15)] hover:scale-[1.01]"
+                : "bg-white/[0.04] text-gray-500 border-white/[0.06] cursor-not-allowed"
             )}
           >
             {isLoading ? (
@@ -291,7 +291,7 @@ export function CraftForm() {
 
           {/* Completion hint */}
           {!isValid && completedFields > 0 && (
-            <p className="text-center text-[11px] text-white/20 animate-in fade-in duration-500">
+            <p className="text-center text-[11px] text-gray-400 animate-in fade-in duration-500">
               {totalFields - completedFields} field{totalFields - completedFields !== 1 ? "s" : ""} remaining{!apiKey ? " + API key" : ""}
             </p>
           )}
