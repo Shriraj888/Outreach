@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ArrowRight, Sparkles, Mail, Send, Inbox, Star, CheckCircle2 } from "lucide-react"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -13,33 +13,6 @@ if (typeof window !== "undefined") {
 
 export function HeroSection() {
   const container = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Mouse parallax for floating elements
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMousePos({ x, y });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Apply mouse parallax to floating elements
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    gsap.utils.toArray<HTMLElement>(".float-card").forEach((el, i) => {
-      const depth = (i + 1) * 8;
-      gsap.to(el, {
-        x: mousePos.x * depth,
-        y: mousePos.y * depth,
-        duration: 1,
-        ease: "power2.out",
-      });
-    });
-  }, [mousePos]);
-
   useGSAP(() => {
     const tl = gsap.timeline();
 
@@ -86,20 +59,43 @@ export function HeroSection() {
     });
 
     // Scroll parallax for floating cards
-    gsap.utils.toArray<HTMLElement>(".float-card").forEach((el, i) => {
+    gsap.utils.toArray<HTMLElement>(".float-card-scroll").forEach((el, i) => {
+      const isTopCard = i === 0 || i === 2;
       gsap.to(el, {
-        y: -80 * (i + 1),
-        rotation: i % 2 === 0 ? 8 : -8,
+        y: isTopCard ? -80 : -160,
+        rotation: i % 2 === 0 ? 12 : -12,
         ease: "none",
         scrollTrigger: {
           trigger: container.current,
-          start: "top top",
+          start: "top bottom",
           end: "bottom top",
           scrub: 1.5
         }
       });
     });
 
+    // Mouse parallax setup using quickTo for performance
+    const xTo = gsap.utils.toArray<HTMLElement>(".float-card-mouse").map(el =>
+      gsap.quickTo(el, "x", { duration: 1.2, ease: "power3.out" })
+    );
+    const yTo = gsap.utils.toArray<HTMLElement>(".float-card-mouse").map(el =>
+      gsap.quickTo(el, "y", { duration: 1.2, ease: "power3.out" })
+    );
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      gsap.utils.toArray<HTMLElement>(".float-card-mouse").forEach((_, i) => {
+        const depth = (i + 1) * 20;
+        xTo[i](x * depth);
+        yTo[i](y * depth);
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, { scope: container });
 
   return (
@@ -114,57 +110,81 @@ export function HeroSection() {
       {/* Floating Cards — OUTSIDE the text container, positioned to edges */}
 
       {/* Left side card 1 — top */}
-      <div className="float-card absolute left-[2%] xl:left-[5%] top-[18%] glass-card p-4 rounded-2xl hidden lg:block opacity-0 z-20 hover:scale-105 transition-transform duration-500 cursor-default">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div>
-            <div className="w-20 h-2 rounded-full bg-white/20 mb-1.5" />
-            <div className="w-14 h-1.5 rounded-full bg-white/10" />
+      <div className="absolute left-[2%] xl:left-[5%] top-[30%] hidden lg:block z-20">
+        <div className="float-card-scroll">
+          <div className="float-card-mouse">
+            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <div className="w-20 h-2 rounded-full bg-white/20 mb-1.5" />
+                  <div className="w-14 h-1.5 rounded-full bg-white/10" />
+                </div>
+              </div>
+              <div className="text-[10px] text-emerald-400/60 font-medium">Email Delivered ✓</div>
+            </div>
           </div>
         </div>
-        <div className="text-[10px] text-emerald-400/60 font-medium">Email Delivered ✓</div>
       </div>
 
       {/* Left side card 2 — bottom */}
-      <div className="float-card absolute left-[3%] xl:left-[8%] bottom-[18%] glass-card p-4 rounded-2xl hidden lg:block opacity-0 z-20 hover:scale-105 transition-transform duration-500 cursor-default">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Inbox className="w-4 h-4 text-blue-400" />
-          </div>
-          <div>
-            <p className="text-[11px] text-white/50 font-medium">Response Rate</p>
-            <p className="text-lg font-bold text-white/80">87%</p>
+      <div className="absolute left-[3%] xl:left-[8%] bottom-[20%] hidden lg:block z-20">
+        <div className="float-card-scroll">
+          <div className="float-card-mouse">
+            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                  <Inbox className="w-4 h-4 text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-[11px] text-white/50 font-medium">Response Rate</p>
+                  <p className="text-lg font-bold text-white/80">87%</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Right side card 1 — top */}
-      <div className="float-card absolute right-[2%] xl:right-[5%] top-[22%] glass-card p-5 rounded-2xl hidden lg:block opacity-0 z-20 hover:scale-105 transition-transform duration-500 cursor-default">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center">
-            <Mail className="w-5 h-5 text-white/50" />
+      <div className="absolute right-[2%] xl:right-[5%] top-[35%] hidden lg:block z-20">
+        <div className="float-card-scroll">
+          <div className="float-card-mouse">
+            <div className="float-card glass-card p-5 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-white/50" />
+                </div>
+                <div>
+                  <p className="text-[11px] text-white/40 font-medium">New Email</p>
+                  <p className="text-xs text-white/60 font-semibold">Re: Internship Inquiry</p>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="w-full h-1.5 rounded-full bg-white/10" />
+                <div className="w-3/4 h-1.5 rounded-full bg-white/[0.06]" />
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="text-[11px] text-white/40 font-medium">New Email</p>
-            <p className="text-xs text-white/60 font-semibold">Re: Internship Inquiry</p>
-          </div>
-        </div>
-        <div className="space-y-1.5">
-          <div className="w-full h-1.5 rounded-full bg-white/10" />
-          <div className="w-3/4 h-1.5 rounded-full bg-white/[0.06]" />
         </div>
       </div>
 
       {/* Right side card 2 — bottom */}
-      <div className="float-card absolute right-[4%] xl:right-[10%] bottom-[22%] glass-card p-4 rounded-2xl hidden lg:block opacity-0 z-20 hover:scale-105 transition-transform duration-500 cursor-default">
-        <div className="flex items-center gap-2 mb-2">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-          ))}
+      <div className="absolute right-[4%] xl:right-[10%] bottom-[20%] hidden lg:block z-20">
+        <div className="float-card-scroll">
+          <div className="float-card-mouse">
+            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
+              <div className="flex items-center gap-2 mb-2">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                ))}
+              </div>
+              <p className="text-[11px] text-white/40 max-w-[120px]">&quot;Got replies from 4 out of 5 emails!&quot;</p>
+            </div>
+          </div>
         </div>
-        <p className="text-[11px] text-white/40 max-w-[120px]">&quot;Got replies from 4 out of 5 emails!&quot;</p>
       </div>
 
       {/* Center content */}
