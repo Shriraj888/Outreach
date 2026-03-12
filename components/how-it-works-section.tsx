@@ -19,7 +19,7 @@ const steps = [
     description: "Tell us who you're reaching out to, your purpose, and what makes you stand out. Just 3 simple inputs.",
     color: "blue",
     preview: {
-      label: "Input Preview",
+      label: "INPUT PREVIEW",
       items: ["Recipient: CTO at fintech startup", "Purpose: Internship", "Your edge: Built 3 React projects"],
     },
   },
@@ -30,7 +30,7 @@ const steps = [
     description: "Our engine analyzes your intent and instantly crafts three distinct email styles — formal, casual, and bold.",
     color: "purple",
     preview: {
-      label: "Processing",
+      label: "PROCESSING",
       items: ["Analyzing tone & context...", "Generating formal variant...", "Generating casual variant..."],
     },
   },
@@ -41,7 +41,7 @@ const steps = [
     description: "Review all three variants side by side. Copy the one that resonates best and send it off with confidence.",
     color: "emerald",
     preview: {
-      label: "Ready",
+      label: "READY",
       items: ["Formal: 94% match", "Casual: 87% match", "Bold: 91% match"],
     },
   },
@@ -49,34 +49,31 @@ const steps = [
 
 const colorMap = {
   blue: {
-    iconBg: "bg-blue-500/10 border-blue-500/20",
-    iconText: "text-blue-400",
-    numberBg: "bg-blue-500/10 text-blue-400",
-    dotBg: "bg-blue-400",
-    lineBg: "from-blue-500/50",
-    cardGlow: "group-hover:shadow-[0_0_80px_-20px_rgba(59,130,246,0.15)]",
-    accent: "group-hover:border-blue-500/20",
-    previewDot: "bg-blue-400",
+    iconBg: "bg-blue-500/[0.08] border-blue-500/20",
+    iconText: "text-blue-500",
+    numberBg: "bg-blue-500/[0.08] text-blue-500",
+    dotBg: "bg-blue-500",
+    cardHover: "hover:border-blue-500/30",
+    glowBg: "from-blue-500/20 via-blue-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-blue-500/60 transition-colors",
   },
   purple: {
-    iconBg: "bg-purple-500/10 border-purple-500/20",
+    iconBg: "bg-purple-500/[0.08] border-purple-500/20",
     iconText: "text-purple-400",
-    numberBg: "bg-purple-500/10 text-purple-400",
-    dotBg: "bg-purple-400",
-    lineBg: "from-purple-500/50",
-    cardGlow: "group-hover:shadow-[0_0_80px_-20px_rgba(168,85,247,0.15)]",
-    accent: "group-hover:border-purple-500/20",
-    previewDot: "bg-purple-400",
+    numberBg: "bg-purple-500/[0.08] text-purple-400",
+    dotBg: "bg-purple-500",
+    cardHover: "hover:border-purple-500/30",
+    glowBg: "from-purple-500/20 via-purple-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-purple-400/60 transition-colors",
   },
   emerald: {
-    iconBg: "bg-emerald-500/10 border-emerald-500/20",
+    iconBg: "bg-emerald-500/[0.08] border-emerald-500/20",
     iconText: "text-emerald-400",
-    numberBg: "bg-emerald-500/10 text-emerald-400",
-    dotBg: "bg-emerald-400",
-    lineBg: "from-emerald-500/50",
-    cardGlow: "group-hover:shadow-[0_0_80px_-20px_rgba(16,185,129,0.15)]",
-    accent: "group-hover:border-emerald-500/20",
-    previewDot: "bg-emerald-400",
+    numberBg: "bg-emerald-500/[0.08] text-emerald-400",
+    dotBg: "bg-emerald-500",
+    cardHover: "hover:border-emerald-500/30",
+    glowBg: "from-emerald-500/20 via-emerald-500/5 to-transparent",
+    previewCheck: "text-white/10 group-hover:text-emerald-400/60 transition-colors",
   },
 }
 
@@ -117,49 +114,42 @@ export function HowItWorksSection() {
     });
 
     // Connecting lines animation
-    gsap.utils.toArray<HTMLElement>(".connect-line").forEach((line) => {
-      gsap.fromTo(line,
-        { scaleX: 0 },
-        {
-          scaleX: 1, duration: 0.6, ease: "power2.out",
-          scrollTrigger: {
-            trigger: line,
-            start: "top 80%",
-          }
+    gsap.fromTo(".connect-line-bg",
+      { scaleX: 0 },
+      {
+        scaleX: 1, duration: 1.2, ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".hiw-grid",
+          start: "top 70%",
         }
-      );
-    });
+      }
+    );
 
   }, { scope: container });
 
   return (
-    <section id="how-it-works" ref={container} className="relative py-32 sm:py-40 px-4 bg-black overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-grid opacity-[0.08]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-white/[0.015] rounded-full blur-[150px]" />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto">
+    <section id="how-it-works" ref={container} className="relative py-32 sm:py-40 px-4 bg-[#020202] overflow-hidden">
+      
+      <div className="relative z-10 max-w-[1200px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-20 sm:mb-28">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] mb-6">
-            <ArrowRight className="w-4 h-4 text-white/50" />
+        <div className="text-center mb-24">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] mb-8 shadow-sm">
+            <ArrowRight className="w-3.5 h-3.5 text-white/40" />
             <span className="text-sm font-medium text-white/50">How It Works</span>
           </div>
-          <h2 className="hiw-title text-4xl sm:text-5xl lg:text-6xl font-medium text-white mb-5 tracking-tight">
-            Three Steps.<br className="sm:hidden" /> Zero Friction.
+          <h2 className="hiw-title text-5xl sm:text-6xl lg:text-7xl font-semibold text-white mb-6 tracking-tight">
+            Three Steps. <span className="text-white/70">Zero Friction.</span>
           </h2>
-          <p className="hiw-subtitle text-lg sm:text-xl text-white/35 max-w-xl mx-auto font-light">
+          <p className="hiw-subtitle text-lg sm:text-xl text-white/40 max-w-xl mx-auto font-light">
             From blank page to inbox-ready email in under 30 seconds.
           </p>
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-          {/* Connecting lines between cards */}
-          <div className="connect-line hidden md:block absolute top-[72px] left-[33.33%] w-[calc(33.33%-48px)] h-px bg-gradient-to-r from-blue-500/30 via-white/10 to-purple-500/30 origin-left scale-x-0 -translate-x-[calc(50%-24px)]" style={{ left: 'calc(33.33% - 12px)', width: 'calc(33.33% - 24px + 24px)' }} />
-          <div className="connect-line hidden md:block absolute top-[72px] h-px bg-gradient-to-r from-purple-500/30 via-white/10 to-emerald-500/30 origin-left scale-x-0" style={{ left: 'calc(66.66% - 12px)', width: 'calc(33.33% - 24px + 24px)' }} />
+        <div className="hiw-grid grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          
+          {/* Connecting line that spans behind the cards in desktop */}
+          <div className="connect-line-bg hidden md:block absolute top-[62px] left-[16.66%] right-[16.66%] h-[1px] bg-gradient-to-r from-blue-500/0 via-purple-500/40 to-emerald-500/0 origin-left z-0" />
 
           {steps.map((step, index) => {
             const colors = colorMap[step.color as keyof typeof colorMap];
@@ -169,75 +159,69 @@ export function HowItWorksSection() {
               <div
                 key={step.step}
                 className={cn(
-                  "step-card group relative rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden transition-all duration-500 cursor-default opacity-0",
-                  colors.cardGlow,
-                  colors.accent,
-                  isActive && "border-white/[0.12]"
+                  "step-card group relative rounded-[28px] border border-white/5 bg-[#0a0a0a] overflow-hidden transition-all duration-500 z-10",
+                  colors.cardHover,
+                  isActive && "border-white/10"
                 )}
                 onMouseEnter={() => setActiveStep(index)}
                 onMouseLeave={() => setActiveStep(null)}
               >
-                {/* Top accent line */}
-                <div className={cn("absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500", `via-${step.color === 'blue' ? 'blue' : step.color === 'purple' ? 'purple' : 'emerald'}-500/40`)} />
+                {/* Stunning Radial Hover Glow inside the card */}
+                <div 
+                  className={cn(
+                    "absolute inset-x-0 top-0 h-[250px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-t-[28px]", 
+                    "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))]",
+                    colors.glowBg
+                  )} 
+                />
 
-                {/* Gradient overlay */}
-                <div className={cn("absolute inset-x-0 top-0 h-40 bg-gradient-to-b to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500", colors.lineBg)} />
-
-                <div className="relative p-6 sm:p-8">
-                  {/* Step number + Icon */}
-                  <div className="flex items-center justify-between mb-8">
-                    <div className={cn("w-14 h-14 rounded-2xl border flex items-center justify-center transition-all duration-500 group-hover:scale-110", colors.iconBg)}>
-                      <step.icon className={cn("w-6 h-6", colors.iconText)} />
+                <div className="relative p-7 sm:p-9 z-10 h-full flex flex-col">
+                  {/* Step number + Icon Row */}
+                  <div className="flex items-center justify-between mb-10">
+                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-500 shadow-inner group-hover:scale-105", colors.iconBg)}>
+                      <step.icon className={cn("w-5 h-5", colors.iconText)} />
                     </div>
-                    <span className={cn("text-xs font-mono font-bold tracking-widest px-3 py-1.5 rounded-lg", colors.numberBg)}>
+                    <span className={cn("text-[10px] font-bold tracking-[0.15em] px-3.5 py-1.5 rounded-full border transition-colors", colors.numberBg, "border-transparent text-opacity-90")}>
                       STEP {step.step}
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 tracking-tight">
-                    {step.title}
-                  </h3>
+                  {/* Text Content */}
+                  <div className="mb-10">
+                    <h3 className="text-[22px] font-bold text-white mb-3 tracking-tight group-hover:text-white transition-colors">
+                      {step.title}
+                    </h3>
+                    <p className="text-[15px] text-white/40 leading-[1.6] font-light group-hover:text-white/50 transition-colors">
+                      {step.description}
+                    </p>
+                  </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-white/40 leading-relaxed mb-8 font-light">
-                    {step.description}
-                  </p>
-
-                  {/* Interactive preview card */}
-                  <div className={cn(
-                    "rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-500",
-                    isActive && "bg-white/[0.04] border-white/[0.1]"
-                  )}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", colors.dotBg)} />
-                      <span className="text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold">
-                        {step.preview.label}
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {step.preview.items.map((item, i) => (
-                        <div
-                          key={i}
-                          className={cn(
-                            "flex items-center gap-2.5 text-xs text-white/30 transition-all duration-500",
-                            isActive && "text-white/50",
-                          )}
-                          style={{
-                            transitionDelay: isActive ? `${i * 100}ms` : '0ms',
-                            transform: isActive ? 'translateX(0)' : 'translateX(-4px)',
-                            opacity: isActive ? 1 : 0.6,
-                          }}
-                        >
-                          <CheckCircle2 className={cn(
-                            "w-3 h-3 transition-colors duration-500 flex-shrink-0",
-                            isActive ? colors.iconText : "text-white/15"
-                          )} />
-                          {item}
-                        </div>
-                      ))}
+                  {/* Inner Input Preview Container */}
+                  <div className="mt-auto">
+                    <div className="rounded-[20px] border border-white/5 bg-black/40 p-5 group-hover:bg-black/60 group-hover:border-white/10 transition-all duration-500">
+                      
+                      <div className="flex items-center gap-2.5 mb-4">
+                        <div className={cn("w-1.5 h-1.5 rounded-full", colors.dotBg, isActive ? "animate-pulse" : "opacity-50")} />
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-bold">
+                          {step.preview.label}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {step.preview.items.map((item, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center gap-3 text-[13px] text-white/40 font-medium group-hover:text-white/60 transition-colors duration-500"
+                          >
+                            <CheckCircle2 className={cn("w-3.5 h-3.5 flex-shrink-0", colors.previewCheck)} />
+                            <span className="truncate">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
                     </div>
                   </div>
+
                 </div>
               </div>
             )
