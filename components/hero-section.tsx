@@ -1,244 +1,450 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Sparkles, Mail, Send, Inbox, Star, CheckCircle2 } from "lucide-react"
-import { useRef, useEffect } from "react"
+import {
+  ArrowRight,
+  CheckCircle2,
+  Mail,
+} from "lucide-react"
+import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
+const proofItems: Array<{
+  value: string
+  label: string
+}> = [
+  {
+    value: "3 angles",
+    label: "One brief. Three tones.",
+  },
+  {
+    value: "12 sec",
+    label: "Blank page to first draft.",
+  },
+  {
+    value: "Reply-ready",
+    label: "Sounds human, not generated.",
+  },
+]
+
+const toneItems = [
+  {
+    name: "Formal",
+    description: "Clear framing for recruiters and operators.",
+    background: "linear-gradient(135deg, rgba(96,165,250,0.22), rgba(34,211,238,0.04))",
+  },
+  {
+    name: "Casual",
+    description: "Relaxed, warm, and easy to respond to.",
+    background: "linear-gradient(135deg, rgba(167,139,250,0.22), rgba(232,121,249,0.04))",
+  },
+  {
+    name: "Bold",
+    description: "Sharper positioning when you need contrast.",
+    background: "linear-gradient(135deg, rgba(251,113,133,0.22), rgba(251,146,60,0.04))",
+  },
+]
+
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
+  gsap.registerPlugin(useGSAP, ScrollTrigger)
 }
 
 export function HeroSection() {
-  const container = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null)
+  const spotlight = useRef<HTMLDivElement>(null)
+
   useGSAP(() => {
-    const tl = gsap.timeline();
+    const root = container.current
+    if (!root) return
 
-    tl.fromTo(".hero-badge",
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power4.out", delay: 0.3 }
-    )
-      .fromTo(".hero-title-line",
-        { y: 60, opacity: 0, rotationX: -15 },
-        { y: 0, opacity: 1, rotationX: 0, duration: 1.2, ease: "expo.out", stagger: 0.15 },
-        "-=0.7"
-      )
-      .fromTo(".hero-subtitle",
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power4.out" },
-        "-=0.8"
-      )
-      .fromTo(".hero-cta",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.5)" },
-        "-=0.6"
-      )
-      .fromTo(".float-card",
-        { y: 60, opacity: 0, scale: 0.8, rotation: -5 },
-        { y: 0, opacity: 1, scale: 1, rotation: 0, duration: 1.2, stagger: 0.15, ease: "power3.out" },
-        "-=1"
-      )
-      .fromTo(".hero-stat",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power3.out" },
-        "-=0.5"
-      );
+    const intro = gsap.timeline({ defaults: { ease: "power3.out" } })
 
-    // Parallax background items
-    gsap.to(".parallax-bg", {
-      yPercent: 50,
+    intro
+      .fromTo(
+        ".hero-heading",
+        { y: 72, opacity: 0, rotateX: -24 },
+        {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 1.15,
+          stagger: 0.12,
+          ease: "expo.out",
+        }
+      )
+      .fromTo(
+        ".hero-copy",
+        { y: 32, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85 },
+        "-=0.75"
+      )
+      .fromTo(
+        ".hero-actions",
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75 },
+        "-=0.55"
+      )
+      .fromTo(
+        ".hero-proof-card",
+        { y: 20, opacity: 0, scale: 0.96 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.7, stagger: 0.08 },
+        "-=0.45"
+      )
+      .fromTo(
+        ".hero-panel",
+        { y: 40, opacity: 0, scale: 0.96, rotateX: 10 },
+        { y: 0, opacity: 1, scale: 1, rotateX: 0, duration: 1.15, ease: "expo.out" },
+        "-=0.95"
+      )
+      .fromTo(
+        ".hero-panel-card",
+        { y: 26, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, stagger: 0.08 },
+        "-=0.85"
+      )
+
+    gsap.to(".hero-orbit-one", {
+      rotate: 360,
+      duration: 24,
+      repeat: -1,
+      ease: "none",
+      transformOrigin: "50% 50%",
+    })
+
+    gsap.to(".hero-orbit-two", {
+      rotate: -360,
+      duration: 30,
+      repeat: -1,
+      ease: "none",
+      transformOrigin: "50% 50%",
+    })
+
+    gsap.to(".hero-depth-one", {
+      yPercent: -10,
       ease: "none",
       scrollTrigger: {
-        trigger: container.current,
+        trigger: root,
         start: "top top",
         end: "bottom top",
-        scrub: true
+        scrub: 1.2,
+      },
+    })
+
+    gsap.to(".hero-depth-two", {
+      yPercent: -18,
+      ease: "none",
+      scrollTrigger: {
+        trigger: root,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+      },
+    })
+
+    const parallaxItems = gsap.utils.toArray<HTMLElement>(".hero-parallax")
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const bounds = root.getBoundingClientRect()
+      const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5
+      const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5
+
+      if (spotlight.current) {
+        gsap.to(spotlight.current, {
+          x: relativeX * 70,
+          y: relativeY * 50,
+          duration: 0.9,
+          ease: "power3.out",
+          overwrite: "auto",
+        })
       }
-    });
 
-    // Scroll parallax for floating cards
-    gsap.utils.toArray<HTMLElement>(".float-card-scroll").forEach((el, i) => {
-      const isTopCard = i === 0 || i === 2;
-      gsap.to(el, {
-        y: isTopCard ? -80 : -160,
-        rotation: i % 2 === 0 ? 12 : -12,
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5
-        }
-      });
-    });
+      parallaxItems.forEach((item, index) => {
+        const strength = 18 + index * 4
+        gsap.to(item, {
+          x: relativeX * strength,
+          y: relativeY * strength,
+          duration: 1.1,
+          ease: "power3.out",
+          overwrite: "auto",
+        })
+      })
+    }
 
-    // Mouse parallax setup using quickTo for performance
-    const xTo = gsap.utils.toArray<HTMLElement>(".float-card-mouse").map(el =>
-      gsap.quickTo(el, "x", { duration: 1.2, ease: "power3.out" })
-    );
-    const yTo = gsap.utils.toArray<HTMLElement>(".float-card-mouse").map(el =>
-      gsap.quickTo(el, "y", { duration: 1.2, ease: "power3.out" })
-    );
+    const resetPointer = () => {
+      if (spotlight.current) {
+        gsap.to(spotlight.current, {
+          x: 0,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        })
+      }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      parallaxItems.forEach((item) => {
+        gsap.to(item, {
+          x: 0,
+          y: 0,
+          duration: 1.1,
+          ease: "power3.out",
+          overwrite: "auto",
+        })
+      })
+    }
 
-      gsap.utils.toArray<HTMLElement>(".float-card-mouse").forEach((_, i) => {
-        const depth = (i + 1) * 20;
-        xTo[i](x * depth);
-        yTo[i](y * depth);
-      });
-    };
+    root.addEventListener("pointermove", handlePointerMove)
+    root.addEventListener("pointerleave", resetPointer)
 
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, { scope: container });
+    return () => {
+      root.removeEventListener("pointermove", handlePointerMove)
+      root.removeEventListener("pointerleave", resetPointer)
+    }
+  }, { scope: container })
 
   return (
-    <section ref={container} className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden perspective-1000">
-      {/* Abstract Background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-grid opacity-20 parallax-bg" />
+    <section ref={container} className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-18 lg:pt-32 lg:pb-16">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="hero-depth-one absolute left-1/2 top-10 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(173,95,255,0.2) 0%, rgba(173,95,255,0) 72%)",
+          }}
+        />
+        <div
+          className="hero-depth-two absolute right-[6%] top-[16%] h-[20rem] w-[20rem] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(59,130,246,0) 72%)",
+          }}
+        />
+        <div
+          className="hero-depth-one absolute left-[4%] bottom-[8%] h-[18rem] w-[18rem] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(circle, rgba(214,10,71,0.14) 0%, rgba(214,10,71,0) 72%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+            maskImage: "linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)",
+          }}
+        />
       </div>
 
-      {/* Floating Cards — OUTSIDE the text container, positioned to edges */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1.02fr)_minmax(380px,0.98fr)] xl:gap-16">
+          <div className="relative">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="overflow-hidden">
+                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                  Cold emails with
+                </h1>
+              </div>
+              <div className="overflow-hidden">
+                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                  <span className="bg-gradient-to-r from-white via-violet-200 to-white bg-clip-text text-transparent">
+                    taste, timing,
+                  </span>
+                </h1>
+              </div>
+              <div className="overflow-hidden">
+                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                  and intent.
+                </h1>
+              </div>
+            </div>
 
-      {/* Left side card 1 — top */}
-      <div className="absolute left-[2%] xl:left-[5%] top-[30%] hidden lg:block z-20">
-        <div className="float-card-scroll">
-          <div className="float-card-mouse">
-            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <p className="hero-copy mt-5 max-w-xl text-base leading-7 text-gray-400 opacity-0 sm:text-lg sm:leading-8">
+              Write first drafts that feel researched, personal, and confident.
+              Feed three inputs, generate three distinct angles, and send the
+              one that matches your voice.
+            </p>
+
+            <div className="hero-actions mt-7 opacity-0">
+              <Link
+                href="/craft"
+                className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 sm:px-8 sm:text-base"
+                style={{
+                  background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 55%, #8b5cf6 100%)",
+                  boxShadow: "0 0 0 1px rgba(139,92,246,0.45), 0 12px 40px -10px rgba(109,40,217,0.65), inset 0 1px 0 rgba(255,255,255,0.12)",
+                }}
+              >
+                <span
+                  className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0))" }}
+                />
+                <span className="relative">Craft your first draft</span>
+                <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            <div className="mt-8 flex items-stretch divide-x divide-white/[0.07]">
+              {proofItems.map((item) => (
+                <div
+                  key={item.value}
+                  className="hero-proof-card flex flex-1 flex-col gap-1 px-4 first:pl-0 last:pr-0 opacity-0"
+                >
+                  <p className="text-lg font-semibold tracking-tight text-white">{item.value}</p>
+                  <p className="text-[11px] leading-snug text-gray-500">{item.label}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-[620px] lg:mt-1 lg:mx-0">
+            <div
+              className="hero-orbit hero-orbit-one absolute -left-6 top-2 z-0 h-[26rem] w-[26rem] rounded-full opacity-70"
+              style={{
+                background:
+                  "conic-gradient(from 180deg, rgba(173,95,255,0) 0deg, rgba(173,95,255,0.42) 90deg, rgba(173,95,255,0) 180deg, rgba(255,255,255,0.16) 260deg, rgba(173,95,255,0) 360deg)",
+                maskImage:
+                  "radial-gradient(circle, transparent 63%, black 65%, black 68%, transparent 70%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, transparent 63%, black 65%, black 68%, transparent 70%)",
+              }}
+            />
+            <div
+              className="hero-orbit hero-orbit-two absolute -right-10 bottom-10 z-0 h-[18rem] w-[18rem] rounded-full opacity-60"
+              style={{
+                background:
+                  "conic-gradient(from 120deg, rgba(59,130,246,0) 0deg, rgba(59,130,246,0.4) 120deg, rgba(59,130,246,0) 220deg, rgba(214,10,71,0.2) 300deg, rgba(59,130,246,0) 360deg)",
+                maskImage:
+                  "radial-gradient(circle, transparent 60%, black 63%, black 67%, transparent 70%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, transparent 60%, black 63%, black 67%, transparent 70%)",
+              }}
+            />
+
+            <div
+              ref={spotlight}
+              className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+              style={{
+                background: "radial-gradient(circle, rgba(173,95,255,0.18) 0%, rgba(173,95,255,0) 72%)",
+              }}
+            />
+
+            <div
+              className="hero-panel hero-depth-two relative overflow-hidden rounded-[2rem] border border-white/[0.1] p-4 opacity-0 shadow-[0_40px_120px_-48px_rgba(114,74,255,0.45)] backdrop-blur-2xl sm:p-5"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.025) 100%)",
+              }}
+            >
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <div className="absolute right-8 top-6 h-24 w-24 rounded-full bg-violet-500/10 blur-2xl" />
+
+              <div className="flex items-center justify-between gap-4">
                 <div>
-                <div className="w-20 h-2 rounded-full bg-white/10 mb-1.5" />
-                <div className="w-14 h-1.5 rounded-full bg-white/[0.06]" />
+                  <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Sequence preview</p>
+                  <h2 className="mt-2 text-xl font-medium tracking-tight text-white sm:text-2xl">First draft, already refined.</h2>
+                </div>
+                <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+                  Live preview
                 </div>
               </div>
-              <div className="text-[10px] text-emerald-400 font-medium">Email Delivered ✓</div>
+
+              <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.18fr)_minmax(220px,0.82fr)]">
+                <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-4 backdrop-blur-xl">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-white">
+                        <Mail className="h-4.5 w-4.5" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">Internship outreach</p>
+                        <p className="text-xs text-gray-500">Generated from 3 structured inputs</p>
+                      </div>
+                    </div>
+                    <div className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs text-gray-400">
+                      Draft 01
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-[1.5rem] border border-white/[0.08] bg-white/[0.03] p-3.5">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Subject</p>
+                    <p className="mt-1.5 text-base font-medium text-white">
+                      A quick idea for your product growth team
+                    </p>
+                  </div>
+
+                  <div className="mt-3 space-y-2.5 text-sm leading-6 text-gray-300">
+                    <p>
+                      Hi Riya, loved how Acme is simplifying onboarding for first-time users.
+                    </p>
+                    <p>
+                      I build React product experiments fast and would love to bring that pace to your growth team.
+                    </p>
+                    <p>
+                      If useful, I can share a few projects directly relevant to this role.
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-3 text-xs text-gray-500">
+                    <span>Warm intro tone</span>
+                    <span>Clear ask</span>
+                    <span>Easy to reply</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-4 backdrop-blur-xl">
+                    <p className="text-xs uppercase tracking-[0.22em] text-gray-500">Quality signal</p>
+                    <div className="mt-4 flex items-end justify-between gap-3">
+                      <div>
+                        <p className="text-3xl font-medium tracking-tight text-white">87%</p>
+                        <p className="mt-1 text-sm text-gray-400">Human tone score</p>
+                      </div>
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-emerald-400">
+                        <CheckCircle2 className="h-5 w-5" />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 space-y-2.5">
+                      <div>
+                        <div className="mb-1.5 flex items-center justify-between text-xs text-gray-500">
+                          <span>Clarity</span>
+                          <span>94</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/[0.05]">
+                          <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-white to-violet-300" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="mb-1.5 flex items-center justify-between text-xs text-gray-500">
+                          <span>Specificity</span>
+                          <span>88</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/[0.05]">
+                          <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-violet-300 to-fuchsia-300" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                    {toneItems.map((tone) => (
+                      <div
+                        key={tone.name}
+                        className="hero-panel-card relative overflow-hidden rounded-[1.5rem] border border-white/[0.08] bg-black/30 p-3.5 backdrop-blur-xl"
+                      >
+                        <div
+                          className="absolute inset-0 opacity-80"
+                          style={{ background: tone.background }}
+                        />
+                        <div className="relative">
+                          <p className="text-sm font-medium text-white">{tone.name}</p>
+                          <p className="mt-1 text-xs leading-[1.35] text-gray-300">{tone.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Left side card 2 — bottom */}
-      <div className="absolute left-[3%] xl:left-[8%] bottom-[20%] hidden lg:block z-20">
-        <div className="float-card-scroll">
-          <div className="float-card-mouse">
-            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                  <Inbox className="w-4 h-4 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-400 font-medium">Response Rate</p>
-                  <p className="text-lg font-bold text-white">87%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right side card 1 — top */}
-      <div className="absolute right-[2%] xl:right-[5%] top-[35%] hidden lg:block z-20">
-        <div className="float-card-scroll">
-          <div className="float-card-mouse">
-            <div className="float-card glass-card p-5 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-gray-400" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-500 font-medium">New Email</p>
-                  <p className="text-xs text-gray-300 font-semibold">Re: Internship Inquiry</p>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <div className="w-full h-1.5 rounded-full bg-white/[0.08]" />
-                <div className="w-3/4 h-1.5 rounded-full bg-white/[0.05]" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right side card 2 — bottom */}
-      <div className="absolute right-[4%] xl:right-[10%] bottom-[20%] hidden lg:block z-20">
-        <div className="float-card-scroll">
-          <div className="float-card-mouse">
-            <div className="float-card glass-card p-4 rounded-2xl opacity-0 hover:scale-105 transition-transform duration-500 cursor-default">
-              <div className="flex items-center gap-2 mb-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                ))}
-              </div>
-              <p className="text-[11px] text-gray-400 max-w-[120px]">&quot;Got replies from 4 out of 5 emails!&quot;</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Center content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-
-        <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 opacity-0">
-          <Sparkles className="w-4 h-4 text-gray-400" />
-          <span className="text-sm font-medium text-gray-400">AI-Powered Email Crafting</span>
-        </div>
-
-        <div className="overflow-hidden">
-          <h1 className="hero-title-line text-5xl sm:text-7xl lg:text-[7rem] font-medium tracking-tighter text-white leading-[1.05] opacity-0">
-            Cold Emails That
-          </h1>
-        </div>
-        <div className="overflow-hidden">
-          <h1 className="hero-title-line text-5xl sm:text-7xl lg:text-[7rem] font-medium tracking-tighter text-white leading-[1.05] opacity-0">
-            <span className="text-glow">Actually</span> Land.
-          </h1>
-        </div>
-
-        <p className="hero-subtitle mt-8 text-lg sm:text-xl text-gray-400 max-w-xl mx-auto font-light tracking-wide opacity-0 leading-relaxed">
-          3 inputs. 3 unique styles. Infinite possibilities.
-          <br className="hidden sm:block" />
-          Craft the perfect sequence in seconds, not hours.
-        </p>
-
-        <div className="hero-cta mt-12 flex flex-col sm:flex-row items-center gap-4 opacity-0">
-          <Link
-            href="/craft"
-            className="group relative inline-flex items-center gap-2 px-8 py-4 text-lg font-medium rounded-full bg-white text-gray-900 overflow-hidden hover:shadow-[0_0_40px_-8px_rgba(255,255,255,0.2)] transition-shadow duration-500"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-black/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-            <span className="relative z-10 flex items-center gap-2">
-              Start Crafting
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </span>
-          </Link>
-          <p className="text-sm text-gray-500 mt-4 sm:mt-0 sm:ml-4">No credit card required. Free forever.</p>
-        </div>
-
-        {/* Stats row */}
-        <div className="mt-16 flex items-center gap-8 sm:gap-12">
-          <div className="hero-stat opacity-0 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-white">3</p>
-            <p className="text-[11px] text-gray-500 mt-1 font-medium uppercase tracking-wider">Email Styles</p>
-          </div>
-          <div className="w-px h-8 bg-white/10" />
-          <div className="hero-stat opacity-0 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-white">10s</p>
-            <p className="text-[11px] text-gray-500 mt-1 font-medium uppercase tracking-wider">Generation</p>
-          </div>
-          <div className="w-px h-8 bg-white/10" />
-          <div className="hero-stat opacity-0 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-white">Free</p>
-            <p className="text-[11px] text-gray-500 mt-1 font-medium uppercase tracking-wider">Forever</p>
           </div>
         </div>
       </div>
