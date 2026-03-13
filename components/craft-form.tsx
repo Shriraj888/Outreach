@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Zap, User, Target, MessageSquare, UserCheck, Loader2, CheckCircle2, ArrowRight } from "lucide-react"
+import { 
+  Zap, User, Target, MessageSquare, UserCheck, Loader2, CheckCircle2, ArrowRight,
+  GraduationCap, Briefcase, Compass, Handshake, Rocket, CircleDollarSign, Sparkles
+} from "lucide-react"
 import {
   Select,
   SelectContent,
@@ -14,13 +17,13 @@ import { ApiKeyInput } from "@/components/api-key-input"
 import { cn } from "@/lib/utils"
 
 const purposes = [
-  { value: "Internship", icon: "🎓" },
-  { value: "Freelance Project", icon: "💼" },
-  { value: "Mentorship", icon: "🧭" },
-  { value: "Collaboration", icon: "🤝" },
-  { value: "Job Opportunity", icon: "🚀" },
-  { value: "Investment / Funding", icon: "💰" },
-  { value: "Other", icon: "✨" },
+  { value: "Internship", icon: GraduationCap, color: "text-blue-400" },
+  { value: "Freelance Project", icon: Briefcase, color: "text-amber-400" },
+  { value: "Mentorship", icon: Compass, color: "text-violet-400" },
+  { value: "Collaboration", icon: Handshake, color: "text-emerald-400" },
+  { value: "Job Opportunity", icon: Rocket, color: "text-rose-400" },
+  { value: "Investment / Funding", icon: CircleDollarSign, color: "text-yellow-400" },
+  { value: "Other", icon: Sparkles, color: "text-slate-400" },
 ]
 
 export interface FormData {
@@ -157,24 +160,55 @@ export function CraftForm() {
               }}
             >
               <SelectTrigger className={cn(
-                "w-full bg-white/[0.06] border rounded-xl py-3.5 px-4 text-sm text-white outline-none transition-all duration-300 h-auto",
+                "w-full bg-white/[0.04] border rounded-xl py-3 px-4 text-sm text-white outline-none transition-all duration-300 min-h-[52px] shadow-sm hover:bg-white/[0.06] data-[state=open]:bg-white/[0.06]",
                 touched.purpose && !formData.purpose
-                  ? "border-red-500/30"
+                  ? "border-red-500/30 hover:border-red-500/40 focus:ring-red-500/20"
                   : formData.purpose
-                    ? "border-emerald-500/25"
-                    : "border-white/[0.08]"
+                    ? "border-emerald-500/25 hover:border-emerald-500/35 focus:ring-emerald-500/20"
+                    : "border-white/[0.08] hover:border-white/[0.15] focus:ring-white/[0.1] data-[state=open]:border-white/[0.2]"
               )}>
-                <SelectValue placeholder="Select your purpose" />
+                {formData.purpose ? (() => {
+                  const selected = purposes.find(p => p.value === formData.purpose);
+                  const Icon = selected?.icon;
+                  return (
+                    <div className="flex flex-1 items-center gap-3">
+                      {Icon && (
+                        <div className={cn("flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.05] ring-1 ring-white/[0.1]", selected?.color)}>
+                          <Icon className="w-4 h-4" />
+                        </div>
+                      )}
+                      <span className="font-medium text-white">{formData.purpose}</span>
+                    </div>
+                  );
+                })() : (
+                  <span className="flex-1 text-left text-gray-500">Select your purpose</span>
+                )}
+                {/* Hidden real SelectValue for form semantics/accessibility without forcing visual override */}
+                <div className="hidden">
+                  <SelectValue placeholder="Select your purpose" />
+                </div>
               </SelectTrigger>
-              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/[0.1] rounded-xl">
-                {purposes.map((purpose) => (
-                  <SelectItem key={purpose.value} value={purpose.value} className="text-gray-300 focus:text-white focus:bg-white/[0.06] rounded-lg">
-                    <span className="flex items-center gap-2">
-                      <span>{purpose.icon}</span>
-                      {purpose.value}
-                    </span>
+              <SelectContent 
+                position="popper" 
+                sideOffset={8}
+                className="z-50 w-[var(--radix-select-trigger-width)] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0A0A0A]/95 p-1.5 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] backdrop-blur-2xl animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+              >
+                {purposes.map((purpose) => {
+                  const Icon = purpose.icon;
+                  return (
+                  <SelectItem 
+                    key={purpose.value} 
+                    value={purpose.value} 
+                    className="group relative flex w-full cursor-pointer select-none items-center rounded-xl py-2.5 pl-3 pr-10 text-sm font-medium outline-none transition-all duration-200 text-gray-400 hover:text-white focus:bg-white/[0.06] focus:text-white data-[state=checked]:bg-white/[0.04] data-[state=checked]:text-white mb-1 last:mb-0 [&>span.absolute]:text-emerald-400"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.03] ring-1 ring-white/[0.05] transition-all duration-200 group-hover:scale-110 group-focus:scale-110 group-focus:bg-white/[0.08] group-data-[state=checked]:bg-emerald-500/10 group-data-[state=checked]:ring-emerald-500/30 group-data-[state=checked]:shadow-[0_0_12px_-3px_rgba(16,185,129,0.3)]", purpose.color)}>
+                        <Icon className="w-4 h-4 group-data-[state=checked]:scale-110 transition-transform duration-200" />
+                      </div>
+                      <span className="truncate tracking-wide group-data-[state=checked]:text-emerald-50 transition-colors">{purpose.value}</span>
+                    </div>
                   </SelectItem>
-                ))}
+                )})}
               </SelectContent>
             </Select>
           </div>

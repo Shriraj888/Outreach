@@ -425,107 +425,111 @@ export function HeroSection() {
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
               <div className="absolute right-8 top-6 h-24 w-24 rounded-full bg-violet-500/10 blur-2xl" />
 
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-4 pb-2">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Sequence preview</p>
-                  <h2 className="mt-2 text-xl font-medium tracking-tight text-white sm:text-2xl">First draft, already refined.</h2>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-violet-400/80">Sequence preview</p>
+                  <h2 className="mt-1.5 text-xl font-semibold tracking-tight text-white sm:text-2xl">First draft, already refined.</h2>
                 </div>
-                <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+                <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                  </span>
                   Live preview
                 </div>
               </div>
 
               <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.18fr)_minmax(220px,0.82fr)]">
-                <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-4 backdrop-blur-xl">
+                <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-5 backdrop-blur-xl transition-colors hover:bg-black/40">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-white">
-                        <Mail className="h-4.5 w-4.5" />
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-white shadow-inner">
+                        <Mail className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-white">Internship outreach</p>
-                        <p className="text-xs text-gray-500">Generated from 3 structured inputs</p>
+                        <p className="text-sm font-semibold text-white tracking-tight">Internship outreach</p>
+                        <p className="text-[11px] text-gray-400 mt-0.5">Generated via AI synthesis</p>
                       </div>
                     </div>
-                    <div className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs text-gray-400">
+                    <div className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-widest text-gray-400">
                       Draft 01
                     </div>
                   </div>
 
-                  <div className="mt-4 rounded-[1.5rem] border border-white/[0.08] bg-white/[0.03] p-3.5">
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Subject</p>
-                    <p className="mt-1.5 text-base font-medium text-white">
+                  <div className="mt-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.03]">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-400/80">Subject</p>
+                    <p className="mt-1.5 text-[15px] font-medium text-white tracking-tight">
                       A quick idea for your product growth team
                     </p>
                   </div>
 
-                  <div className="mt-3 space-y-2.5 text-sm leading-6 text-gray-300">
+                  <div className="mt-4 space-y-3 text-[14px] leading-relaxed text-gray-300">
                     <p>
-                      Hi Riya, loved how Acme is simplifying onboarding for first-time users.
+                      <span className="text-white font-medium">Hi Riya,</span> loved how Acme is simplifying onboarding for first-time users.
                     </p>
                     <p>
-                      I build React product experiments fast and would love to bring that pace to your growth team.
+                      I build React product experiments fast and would love to bring that execution pace to your team.
                     </p>
                     <p>
-                      If useful, I can share a few projects directly relevant to this role.
+                      If useful, I can share a couple of projects directly relevant to this role.
                     </p>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-3 text-xs text-gray-500">
-                    <span>Warm intro tone</span>
-                    <span>Clear ask</span>
-                    <span>Easy to reply</span>
+                  <div className="mt-5 flex items-center gap-2 border-t border-white/[0.06] pt-4 text-[11px] font-medium text-gray-400">
+                    <span className="rounded-full bg-white/[0.03] px-2.5 py-1 border border-white/[0.05]">Warm intro</span>
+                    <span className="rounded-full bg-white/[0.03] px-2.5 py-1 border border-white/[0.05]">Clear ask</span>
+                    <span className="rounded-full bg-white/[0.03] px-2.5 py-1 border border-white/[0.05]">Easy reply</span>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-4 backdrop-blur-xl">
-                    <p className="text-xs uppercase tracking-[0.22em] text-gray-500">Quality signal</p>
+                  <div className="hero-panel-card rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-5 backdrop-blur-xl transition-colors hover:bg-black/40">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-500">Quality signal</p>
                     <div className="mt-4 flex items-end justify-between gap-3">
                       <div>
-                        <p className="text-3xl font-medium tracking-tight text-white">87%</p>
-                        <p className="mt-1 text-sm text-gray-400">Human tone score</p>
+                        <p className="text-4xl font-semibold tracking-tighter text-white">87<span className="text-2xl text-gray-400 font-medium">%</span></p>
+                        <p className="mt-1 text-[13px] font-medium text-gray-400">Human tone score</p>
                       </div>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-emerald-400">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 shadow-[inset_0_0_12px_rgba(16,185,129,0.1)]">
                         <CheckCircle2 className="h-5 w-5" />
                       </div>
                     </div>
 
-                    <div className="mt-4 space-y-2.5">
+                    <div className="mt-5 space-y-3.5">
                       <div>
-                        <div className="mb-1.5 flex items-center justify-between text-xs text-gray-500">
+                        <div className="mb-2 flex items-center justify-between text-[11px] font-medium text-gray-400 uppercase tracking-widest">
                           <span>Clarity</span>
-                          <span>94</span>
+                          <span className="text-white">94</span>
                         </div>
-                        <div className="h-2 rounded-full bg-white/[0.05]">
-                          <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-white to-violet-300" />
+                        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.04]">
+                          <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-violet-500/50 to-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.3)]" />
                         </div>
                       </div>
                       <div>
-                        <div className="mb-1.5 flex items-center justify-between text-xs text-gray-500">
+                        <div className="mb-2 flex items-center justify-between text-[11px] font-medium text-gray-400 uppercase tracking-widest">
                           <span>Specificity</span>
-                          <span>88</span>
+                          <span className="text-white">88</span>
                         </div>
-                        <div className="h-2 rounded-full bg-white/[0.05]">
-                          <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-violet-300 to-fuchsia-300" />
+                        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.04]">
+                          <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-fuchsia-500/50 to-fuchsia-400 shadow-[0_0_10px_rgba(217,70,239,0.3)]" />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
                     {toneItems.map((tone) => (
                       <div
                         key={tone.name}
-                        className="hero-panel-card relative overflow-hidden rounded-[1.5rem] border border-white/[0.08] bg-black/30 p-3.5 backdrop-blur-xl"
+                        className="group hero-panel-card relative overflow-hidden rounded-[1.25rem] border border-white/[0.08] bg-black/30 p-4 backdrop-blur-xl transition-all hover:bg-white/[0.02]"
                       >
                         <div
-                          className="absolute inset-0 opacity-80"
+                          className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-80"
                           style={{ background: tone.background }}
                         />
                         <div className="relative">
-                          <p className="text-sm font-medium text-white">{tone.name}</p>
-                          <p className="mt-1 text-xs leading-[1.35] text-gray-300">{tone.description}</p>
+                          <p className="text-[13px] font-semibold text-white">{tone.name}</p>
+                          <p className="mt-1 text-[12px] leading-relaxed text-gray-400">{tone.description}</p>
                         </div>
                       </div>
                     ))}
