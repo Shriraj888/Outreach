@@ -56,7 +56,7 @@ export function ProTips({ tips }: ProTipsProps) {
               transition={{ duration: 0.5, delay: idx * 0.15 }}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className={`group relative flex flex-col p-8 rounded-[32px] transition-all duration-500 cursor-default ${
+              className={`group relative flex flex-col p-6 md:p-8 rounded-[32px] transition-all duration-500 cursor-default ${
                 isOtherHovered ? "opacity-30 scale-[0.97]" : "opacity-100 scale-100"
               } bg-[#0a0a0a] border border-white/[0.06] ${accent.border} overflow-hidden`}
               style={{
@@ -64,7 +64,7 @@ export function ProTips({ tips }: ProTipsProps) {
               }}
             >
               {/* Massive background number watermark */}
-              <div className="absolute -top-10 -right-8 text-[200px] font-black text-white/[0.02] leading-none select-none pointer-events-none transition-transform duration-700 group-hover:-translate-x-4 group-hover:translate-y-4">
+              <div className="absolute -top-6 -right-4 md:-top-10 md:-right-8 text-[140px] md:text-[200px] font-black text-white/[0.02] leading-none select-none pointer-events-none transition-transform duration-700 group-hover:-translate-x-4 group-hover:translate-y-4">
                 {idx + 1}
               </div>
 

@@ -229,12 +229,12 @@ export function EmailCard({
         </div>
 
         {/* Actions */}
-        <div ref={actionsRef} className="flex gap-3 mt-auto pt-2 w-full justify-between">
+        <div ref={actionsRef} className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-auto pt-2 w-full justify-between">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={handleCopy}
             className={cn(
-              "w-1/2 flex items-center justify-center gap-2 px-4 py-3.5 rounded-[16px] font-medium text-[13px] transition-all duration-300 border",
+              "w-full sm:w-1/2 flex items-center justify-center gap-2 px-4 py-3.5 rounded-[16px] font-medium text-[13px] transition-all duration-300 border",
               copied
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_20px_-4px_rgba(16,185,129,0.3)]"
                 : "bg-white/[0.03] text-gray-300 border-white/[0.06] hover:bg-white/[0.08] hover:text-white"
@@ -243,7 +243,7 @@ export function EmailCard({
             {copied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy Text</>}
           </motion.button>
 
-          <div ref={mailMenuRef} className="w-1/2 relative">
+          <div ref={mailMenuRef} className="w-full sm:w-1/2 relative">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setMailMenuOpen(!mailMenuOpen)}

@@ -110,7 +110,7 @@ export function Footer() {
 
           <div className="flex flex-col">
             <h4 className="text-[11px] font-bold tracking-[0.2em] text-white/30 mb-6 uppercase">Connect</h4>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-row gap-4">
               {socialLinks.map((social) => {
                 const Icon = social.icon
                 return (
@@ -128,10 +128,10 @@ export function Footer() {
 
         {/* Massive Text Section */}
         <div className="w-full flex justify-center mb-12 relative select-none">
-           <h2 
+          <h2 
             className="font-black leading-[0.8] tracking-tighter uppercase text-center w-full"
             style={{ 
-              fontSize: "clamp(5rem, 16vw, 15rem)",
+              fontSize: "clamp(3rem, 15vw, 15rem)",
               backgroundImage: "linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.4) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",

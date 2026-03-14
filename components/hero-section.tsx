@@ -312,7 +312,7 @@ export function HeroSection() {
   }, { scope: container })
 
   return (
-    <section ref={container} className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-18 lg:pt-32 lg:pb-16">
+    <section ref={container} className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-18 lg:pt-32 lg:pb-16">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="hero-depth-one absolute left-1/2 top-10 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
@@ -349,19 +349,19 @@ export function HeroSection() {
           <div className="relative">
             <div className="space-y-2 sm:space-y-3">
               <div className="overflow-hidden">
-                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                <h1 className="hero-heading [text-wrap:balance] text-4xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
                   Cold emails with
                 </h1>
               </div>
               <div className="overflow-hidden">
-                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                <h1 className="hero-heading [text-wrap:balance] text-4xl font-medium tracking-[-0.06em] opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
                   <span className="bg-gradient-to-r from-white via-violet-200 to-white bg-clip-text text-transparent">
                     taste, timing,
                   </span>
                 </h1>
               </div>
               <div className="overflow-hidden">
-                <h1 className="hero-heading [text-wrap:balance] text-5xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
+                <h1 className="hero-heading [text-wrap:balance] text-4xl font-medium tracking-[-0.06em] text-white opacity-0 sm:text-6xl lg:text-[5.25rem] lg:leading-[0.98]">
                   and intent.
                 </h1>
               </div>
@@ -403,10 +403,10 @@ export function HeroSection() {
               {proofItems.map((item) => (
                 <div
                   key={item.value}
-                  className="hero-proof-card flex flex-1 flex-col gap-1 px-4 first:pl-0 last:pr-0 opacity-0"
+                  className="hero-proof-card flex flex-1 flex-col gap-1 px-3 sm:px-4 first:pl-0 last:pr-0 opacity-0"
                 >
-                  <p className="text-lg font-semibold tracking-tight text-white">{item.value}</p>
-                  <p className="text-[11px] leading-snug text-gray-500">{item.label}</p>
+                  <p className="text-[15px] sm:text-lg font-semibold tracking-tight text-white">{item.value}</p>
+                  <p className="text-[10px] sm:text-[11px] leading-snug text-gray-500">{item.label}</p>
                 </div>
               ))}
             </div>

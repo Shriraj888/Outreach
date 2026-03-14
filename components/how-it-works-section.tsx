@@ -94,7 +94,7 @@ function StepCard({ step, index, hoveredIdx, setHoveredIdx }: any) {
       onMouseEnter={() => setHoveredIdx(index)}
       onMouseLeave={() => setHoveredIdx(null)}
       className={cn(
-        "group relative flex flex-col p-8 rounded-[32px] border border-white/[0.05] bg-[#0c0c0c] transition-all duration-500 overflow-hidden min-h-[480px]",
+        "group relative flex flex-col p-6 md:p-8 rounded-[32px] border border-white/[0.05] bg-[#0c0c0c] transition-all duration-500 overflow-hidden min-h-[400px] md:min-h-[480px]",
         step.accent.border,
         isOtherHovered ? "opacity-40 scale-[0.98]" : "opacity-100 scale-100"
       )}
@@ -104,7 +104,7 @@ function StepCard({ step, index, hoveredIdx, setHoveredIdx }: any) {
     >
       {/* Background Watermark */}
       <div className={cn(
-        "absolute -bottom-8 -right-8 text-[240px] font-black leading-none select-none pointer-events-none transition-transform duration-700",
+        "absolute -bottom-6 -right-6 md:-bottom-8 md:-right-8 text-[160px] md:text-[240px] font-black leading-none select-none pointer-events-none transition-transform duration-700",
         step.accent.numberText,
         "group-hover:-translate-x-4 group-hover:-translate-y-4"
       )}>
@@ -178,7 +178,7 @@ export function HowItWorksSection() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
-    <section id="how-it-works" className="relative py-32 sm:py-40 px-4 overflow-hidden border-t border-white/[0.05] bg-black">
+    <section id="how-it-works" className="relative py-20 sm:py-32 px-4 overflow-hidden border-t border-white/[0.05] bg-black">
       {/* Background Flare */}
       <div className="absolute top-0 right-1/4 w-[800px] h-[400px] bg-gradient-to-b from-white/[0.02] to-transparent blur-3xl pointer-events-none" />
 
@@ -200,7 +200,7 @@ export function HowItWorksSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
+            className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
           >
             Three Steps. <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">Zero Friction.</span>
           </motion.h2>
