@@ -191,7 +191,7 @@ export function HeroSection() {
 
     const marqueeTween = gsap.to(".hero-mail-track", {
       xPercent: -50,
-      duration: 80, // Reduced from 120 for a slightly faster baseline speed
+      duration: 30, // Reduced from 80 for a slightly faster baseline speed
       repeat: -1,
       ease: "none",
       force3D: true, // Forces GPU acceleration for smoother continuous loop
