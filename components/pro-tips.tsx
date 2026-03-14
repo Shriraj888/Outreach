@@ -1,45 +1,94 @@
 "use client"
 
-import { Lightbulb, ChevronRight } from "lucide-react"
+import { motion } from "framer-motion"
+import { Lightbulb, ArrowUpRight, Zap, Target, Sparkles } from "lucide-react"
+import { useState } from "react"
 
 interface ProTipsProps {
   tips: string[]
 }
 
+const icons = [Target, Zap, Sparkles]
+
+const accents = [
+  { glow: "bg-blue-500/20", border: "hover:border-blue-500/30", text: "group-hover:text-blue-400", bg: "group-hover:bg-blue-500/10" },
+  { glow: "bg-purple-500/20", border: "hover:border-purple-500/30", text: "group-hover:text-purple-400", bg: "group-hover:bg-purple-500/10" },
+  { glow: "bg-teal-500/20", border: "hover:border-teal-500/30", text: "group-hover:text-teal-400", bg: "group-hover:bg-teal-500/10" }
+]
+
 export function ProTips({ tips }: ProTipsProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+
   return (
-    <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden">
-      {/* Accent gradient */}
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-amber-500/[0.06] to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
-
-      <div className="relative p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-            <Lightbulb className="w-5 h-5 text-amber-400" />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-white tracking-wide">Pro Tips</h3>
-            <p className="text-xs text-gray-500">Expert advice for your outreach</p>
-          </div>
+    <motion.section 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="mt-20 relative w-full"
+    >
+      <div className="flex items-center gap-5 mb-10 px-2">
+        <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-white/[0.08] to-transparent border border-white/[0.1] shadow-lg backdrop-blur-md">
+           <div className="absolute inset-0 rounded-full bg-white/[0.02] backdrop-blur-3xl animate-pulse" />
+           <Lightbulb className="w-6 h-6 text-yellow-500 drop-shadow-[0_0_12px_rgba(234,179,8,0.6)] relative z-10" />
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {tips.map((tip, index) => (
-            <div
-              key={index}
-              className="group flex items-start gap-3 p-4 rounded-xl border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-500/20 transition-all duration-300"
-            >
-              <span className="flex-shrink-0 w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold mt-0.5">
-                {index + 1}
-              </span>
-              <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
-                {tip}
-              </p>
-            </div>
-          ))}
+        <div>
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/50 tracking-tight">
+            Pro Tips
+          </h2>
+          <p className="text-gray-400 text-xs mt-1.5 font-bold tracking-[0.2em] uppercase">
+            Elevate your outreach
+          </p>
         </div>
       </div>
-    </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {tips.map((tip, idx) => {
+          const Icon = icons[idx % icons.length]
+          const isHovered = hoveredIdx === idx
+          const isOtherHovered = hoveredIdx !== null && hoveredIdx !== idx
+          const accent = accents[idx % accents.length]
+
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.15 }}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              className={`group relative flex flex-col p-8 rounded-[32px] transition-all duration-500 cursor-default ${
+                isOtherHovered ? "opacity-30 scale-[0.97]" : "opacity-100 scale-100"
+              } bg-[#0a0a0a] border border-white/[0.06] ${accent.border} overflow-hidden`}
+              style={{
+                boxShadow: isHovered ? "0 20px 40px -20px rgba(0,0,0,0.5)" : "none"
+              }}
+            >
+              {/* Massive background number watermark */}
+              <div className="absolute -top-10 -right-8 text-[200px] font-black text-white/[0.02] leading-none select-none pointer-events-none transition-transform duration-700 group-hover:-translate-x-4 group-hover:translate-y-4">
+                {idx + 1}
+              </div>
+
+              {/* Glowing accent spot under icon */}
+              <div className={`absolute top-8 left-8 w-20 h-20 ${accent.glow} rounded-full blur-[40px] transition-opacity duration-500 opacity-0 group-hover:opacity-100`} />
+
+              <div className="relative z-10 flex-grow">
+                <div className={`flex items-center justify-center w-12 h-12 rounded-2xl bg-white/[0.04] text-white/50 mb-8 border border-white/[0.05] transition-all duration-500 group-hover:scale-110 ${accent.bg} ${accent.text}`}>
+                  <Icon className="w-6 h-6" strokeWidth={1.5} />
+                </div>
+                
+                <p className="text-[15px] text-gray-400 leading-relaxed font-light mb-8 group-hover:text-gray-100 transition-colors duration-500">
+                  {tip}
+                </p>
+              </div>
+
+              <div className={`relative z-10 mt-auto flex items-center text-sm font-semibold text-white/30 ${accent.text} transition-colors duration-500`}>
+                <span>Implement</span>
+                <ArrowUpRight className="w-5 h-5 ml-1 opacity-0 -translate-y-2 translate-x-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-500" />
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+    </motion.section>
   )
 }

@@ -196,7 +196,7 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
           </div>
         ) : results ? (
           <div className="space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
               <EmailCard
                 style="formal"
                 label="Formal"
