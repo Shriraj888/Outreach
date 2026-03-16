@@ -82,7 +82,7 @@ export function ProTips({ tips }: ProTipsProps) {
               </div>
 
               <div className={`relative z-10 mt-auto flex items-center text-[11px] md:text-sm font-semibold text-white/30 ${accent.text} transition-colors duration-500`}>
-                <span>Implement</span>
+                <span>Insight</span>
                 <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 ml-1 opacity-0 -translate-y-2 translate-x-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-500" />
               </div>
             </motion.div>
