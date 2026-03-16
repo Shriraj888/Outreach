@@ -9,6 +9,8 @@ function delay(ms: number) {
 
 // Parse JSON from text, even if wrapped in markdown code blocks
 function extractJSON(text: string) {
+  if (!text) return null
+  
   // Try direct parse first
   try {
     return JSON.parse(text)
@@ -26,11 +28,14 @@ function extractJSON(text: string) {
     }
   }
 
-  // Try to find JSON object in text
-  const jsonMatch = text.match(/\{[\s\S]*\}/)
-  if (jsonMatch) {
+  // Try to find JSON object in text anywhere
+  // Look for the first "{" and the last "}"
+  const firstOpen = text.indexOf('{')
+  const lastClose = text.lastIndexOf('}')
+  if (firstOpen !== -1 && lastClose !== -1 && lastClose > firstOpen) {
     try {
-      return JSON.parse(jsonMatch[0])
+      const jsonStr = text.substring(firstOpen, lastClose + 1)
+      return JSON.parse(jsonStr)
     } catch {
       // noop
     }
@@ -43,7 +48,14 @@ const MAX_RETRIES = 3
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, apiKey, singleStyle } = await request.json()
+    const body = await request.json()
+    const { prompt, apiKey: rawApiKey, singleStyle } = body
+    const apiKey = rawApiKey ? rawApiKey.trim() : ""
+
+    console.log("API Route called")
+    console.log("Has API Key:", !!apiKey)
+    console.log("Key starts with:", apiKey?.substring(0, 6))
+    console.log("Mode:", singleStyle ? "Single" : "Full")
 
     if (!apiKey) {
       return NextResponse.json(
@@ -52,30 +64,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    let currentModelId = "google/gemma-3-27b-it:free"
     let model;
+    let openrouterFactory: any = null;
 
     // Check if the API key is an OpenRouter key (starts with sk-or-)
     if (apiKey.startsWith("sk-or-")) {
       const { createOpenRouter } = await import("@openrouter/ai-sdk-provider")
-      const openrouter = createOpenRouter({ 
+      openrouterFactory = createOpenRouter({ 
         apiKey,
         headers: {
           "HTTP-Referer": "https://cold-mail-crafter.vercel.app",
           "X-Title": "Cold Mail Crafter"
         }
       })
-      // Use a reliable free model on OpenRouter
-      model = openrouter("google/gemma-3-27b-it:free")
+      // Start with user preferred model
+      model = openrouterFactory(currentModelId)
     } else {
       // Google Gemini direct
       const google = createGoogleGenerativeAI({ apiKey })
-      model = google("gemini-2.0-flash")
+      currentModelId = "gemini-1.5-flash"
+      model = google(currentModelId)
     }
 
     // Retry loop for rate limits
     let lastError: unknown = null
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
+        console.log(`Generation attempt ${attempt} with model ${currentModelId}...`)
+        
         const result = await generateText({
           model,
           prompt: singleStyle
@@ -84,6 +101,15 @@ export async function POST(request: NextRequest) {
         })
 
         const text = result.text
+
+        if (!text || text.trim() === "") {
+          console.log("Empty response received from AI model")
+          lastError = new Error("The AI model returned an empty response. This can happen with certain free OpenRouter models. Please try again.")
+          // Wait a bit and retry
+          await delay(2000)
+          continue
+        }
+
         const parsed = extractJSON(text)
 
         // Single style regeneration
@@ -91,8 +117,9 @@ export async function POST(request: NextRequest) {
           if (parsed && parsed.subject && parsed.body) {
             return NextResponse.json(parsed)
           }
+          console.log("Single style response:", text)
           lastError = new Error("AI response was not valid JSON for single style. Raw: " + text.substring(0, 200))
-          continue
+          break
         }
 
         // Full generation (all 3 styles)
@@ -117,11 +144,16 @@ export async function POST(request: NextRequest) {
         }
 
         // If we got text but couldn't parse it properly, fail with context
+        console.log("Full generation response:", text)
+        console.log("Parsed object:", JSON.stringify(parsed, null, 2))
         lastError = new Error("AI response was not valid JSON. Raw: " + text.substring(0, 200))
+        break
       } catch (err) {
         lastError = err
         const errMsg = err instanceof Error ? err.message : ""
         const statusCode = (err as { statusCode?: number })?.statusCode
+
+        console.error(`Attempt ${attempt} error:`, errMsg, "Status:", statusCode)
 
         // If rate limited or quota exceeded, wait and retry
         if (
@@ -151,6 +183,8 @@ export async function POST(request: NextRequest) {
       errorMessage.includes("Key limit exceeded") ||
       errorMessage.includes("RESOURCE_EXHAUSTED") ||
       errorMessage.includes("quota") ||
+      errorMessage.includes("Rate limit exceeded") ||
+      errorMessage.includes("rate limit") ||
       statusCode === 429
     ) {
       return NextResponse.json(
