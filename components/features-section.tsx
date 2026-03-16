@@ -129,7 +129,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px] md:auto-rows-[420px]">
           
           {/* Card 1: Context Engine (Span 2) */}
           <div className="bento-card relative md:col-span-2 group rounded-[28px] bg-white/[0.03] border border-white/[0.06] overflow-hidden transform-gpu opacity-0 backdrop-blur-xl">
@@ -137,7 +137,7 @@ export function FeaturesSection() {
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
             {/* Visual Header Graphic */}
-            <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-purple-500/[0.08] to-transparent flex items-center justify-center border-b border-white/[0.04]">
+            <div className="absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-purple-500/[0.08] to-transparent flex items-center justify-center">
               <div className="w-[80%] max-w-[420px] rounded-xl border border-white/[0.08] bg-gray-900 shadow-2xl overflow-hidden font-mono text-[11px] sm:text-xs z-10 group-hover:-translate-y-2 transition-transform duration-500">
                 <div className="flex items-center px-4 py-2 border-b border-white/10 bg-white/[0.05]">
                   <div className="flex gap-1.5 ">
@@ -156,12 +156,12 @@ export function FeaturesSection() {
             </div>
 
             {/* Content Bottom */}
-            <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-purple-500/[0.12] border border-purple-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-purple-500/[0.18] transition-colors">
-                <BrainCircuit className="w-[18px] h-[18px] text-purple-400" />
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 pointer-events-none z-10">
+              <div className="w-10 h-10 rounded-[12px] bg-purple-500/[0.12] border border-purple-500/20 flex items-center justify-center mb-4 shadow-inner group-hover:bg-purple-500/[0.18] transition-colors">
+                <BrainCircuit className="w-4 h-4 text-purple-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Deep Context Analysis</h3>
-              <p className="text-gray-500 leading-[1.6] text-[15px] font-light max-w-sm">We don't use fill-in-the-blank templates. Our engine fully understands the nuance of your target and objective to write a bespoke draft.</p>
+              <h3 className="text-[20px] font-semibold text-white mb-2 tracking-tight">LLM Context Engine</h3>
+              <p className="text-gray-500 leading-[1.6] text-[14px] font-light max-w-sm">Dynamically synthesizes recipient metadata and outreach intent to generate zero-shot, bespoke copy without static templates.</p>
             </div>
           </div>
 
@@ -183,12 +183,12 @@ export function FeaturesSection() {
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-emerald-500/[0.12] border border-emerald-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-emerald-500/[0.18] transition-colors">
-                <ShieldCheck className="w-[18px] h-[18px] text-emerald-400" />
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 pointer-events-none z-10">
+              <div className="w-10 h-10 rounded-[12px] bg-emerald-500/[0.12] border border-emerald-500/20 flex items-center justify-center mb-4 shadow-inner group-hover:bg-emerald-500/[0.18] transition-colors">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Always Land</h3>
-              <p className="text-gray-500 leading-[1.6] text-[15px] font-light">Built-in deliverability checks strip out algorithmic spam triggers instantly.</p>
+              <h3 className="text-[20px] font-semibold text-white mb-2 tracking-tight">Deliverability Optimization</h3>
+              <p className="text-gray-500 leading-[1.6] text-[14px] font-light">Automated heuristic scanning removes spam-trigger n-grams and optimizes syntax for maximum primary inbox placement.</p>
             </div>
           </div>
 
@@ -211,12 +211,12 @@ export function FeaturesSection() {
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-blue-500/[0.12] border border-blue-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-blue-500/[0.18] transition-colors">
-                <SlidersHorizontal className="w-[18px] h-[18px] text-blue-400" />
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 pointer-events-none z-10">
+              <div className="w-10 h-10 rounded-[12px] bg-blue-500/[0.12] border border-blue-500/20 flex items-center justify-center mb-4 shadow-inner group-hover:bg-blue-500/[0.18] transition-colors">
+                <SlidersHorizontal className="w-4 h-4 text-blue-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Adaptive Tones</h3>
-              <p className="text-gray-500 leading-[1.6] text-[15px] font-light">Calibrate the phrasing to match your recipient's expectation precisely.</p>
+              <h3 className="text-[20px] font-semibold text-white mb-2 tracking-tight">Dynamic Tone Calibration</h3>
+              <p className="text-gray-500 leading-[1.6] text-[14px] font-light">Algorithmic tone mapping adjusts lexical choice and pacing to align precisely with target recipient profiles.</p>
             </div>
           </div>
 
@@ -225,20 +225,20 @@ export function FeaturesSection() {
             <div className="spotlight-effect absolute w-[500px] h-[500px] bg-cyan-500/[0.06] rounded-full blur-[80px] pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 z-0" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/[0.06]" />
             
-            <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center z-10 border-b border-white/[0.04]">
-              <div className="w-[85%] max-w-[500px] p-5 sm:p-6 rounded-[18px] border border-white/[0.08] bg-gray-900 flex flex-col gap-4 font-medium text-[13px] sm:text-sm text-white/60 leading-relaxed shadow-2xl group-hover:scale-[1.03] transition-transform duration-500">
+            <div className="absolute inset-x-0 top-0 h-[60%] flex items-center justify-center z-10 border-b border-white/[0.04] p-4">
+              <div className="w-full max-w-[480px] p-4 sm:p-5 rounded-[18px] border border-white/[0.08] bg-gray-900 flex flex-col gap-3 font-medium text-[12px] sm:text-[13px] text-white/60 leading-relaxed shadow-2xl group-hover:-translate-y-2 transition-transform duration-500">
                 <p>Hi <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]">{'{{'}FirstName{'}}'}</span>,</p>
                 <p>I noticed your recent launch of <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-purple-300 bg-purple-500/10 border border-purple-500/20 drop-shadow-[0_0_10px_rgba(192,132,252,0.2)]">{'{{'}Recent_Product{'}}'}</span>. <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-amber-300 bg-amber-500/10 border border-amber-500/20 drop-shadow-[0_0_10px_rgba(252,211,77,0.2)]">{'{{'}Icebreaker_Compliment{'}}'}</span></p>
                 <p>Are you open to a quick chat about scaling your outreach infrastructure?</p>
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-8 sm:p-10 pointer-events-none z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-cyan-500/[0.12] border border-cyan-500/20 flex items-center justify-center mb-6 shadow-inner group-hover:bg-cyan-500/[0.18] transition-colors">
-                <Terminal className="w-[18px] h-[18px] text-cyan-400" />
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 pointer-events-none z-10">
+              <div className="w-10 h-10 rounded-[12px] bg-cyan-500/[0.12] border border-cyan-500/20 flex items-center justify-center mb-4 shadow-inner group-hover:bg-cyan-500/[0.18] transition-colors">
+                <Terminal className="w-4 h-4 text-cyan-400" />
               </div>
-              <h3 className="text-[22px] font-semibold text-white mb-3 tracking-tight">Hyper-Personalized Tags</h3>
-              <p className="text-gray-500 leading-[1.6] text-[15px] font-light max-w-sm">Inject custom attributes and AI-generated icebreakers effortlessly.</p>
+              <h3 className="text-[20px] font-semibold text-white mb-2 tracking-tight">Intelligent Variable Injection</h3>
+              <p className="text-gray-500 leading-[1.6] text-[14px] font-light max-w-sm">Programmatically embed context-aware attributes and AI-synthesized icebreakers to maximize personalization at scale.</p>
             </div>
           </div>
 
