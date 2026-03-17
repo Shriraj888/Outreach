@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Google Gemini direct
       const google = createGoogleGenerativeAI({ apiKey })
-      currentModelId = "gemini-1.5-flash"
+      currentModelId = "gemini-2.5-flash"
       model = google(currentModelId)
     }
 
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
           }
           console.log("Single style response:", text)
           lastError = new Error("AI response was not valid JSON for single style. Raw: " + text.substring(0, 200))
-          break
+          continue
         }
 
         // Full generation (all 3 styles)
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
         console.log("Full generation response:", text)
         console.log("Parsed object:", JSON.stringify(parsed, null, 2))
         lastError = new Error("AI response was not valid JSON. Raw: " + text.substring(0, 200))
-        break
+        continue
       } catch (err) {
         lastError = err
         const errMsg = err instanceof Error ? err.message : ""
@@ -158,12 +158,17 @@ export async function POST(request: NextRequest) {
         // If rate limited or quota exceeded, wait and retry
         if (
           statusCode === 429 ||
+          statusCode === 503 ||
           errMsg.includes("RESOURCE_EXHAUSTED") ||
           errMsg.includes("quota") ||
-          errMsg.includes("rate")
+          errMsg.includes("rate") ||
+          errMsg.includes("503") ||
+          errMsg.includes("overloaded") ||
+          errMsg.includes("SAFETY") ||
+          errMsg.toLowerCase().includes("safety")
         ) {
           const waitTime = attempt * 5000 // 5s, 10s, 15s
-          console.log(`Rate limited. Retrying in ${waitTime / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`)
+          console.log(`Rate limited or temporary error. Retrying in ${waitTime / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`)
           await delay(waitTime)
           continue
         }
