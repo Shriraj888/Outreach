@@ -140,21 +140,121 @@ export function EmailCard({
   }
 
   const generateHtmlEmail = () => {
-    const bodyHtml = body.split("\n").map(line => line.trim() === "" ? "<br/>" : `<p style="margin:0 0 12px 0;font-size:15px;line-height:1.7;color:#333;font-family:'Segoe UI',Arial,sans-serif;">${line}</p>`).join("\n")
+    // Process body into email-safe paragraphs with proper spacing
+    const bodyHtml = body
+      .split("\n")
+      .map((line) => {
+        const trimmed = line.trim()
+        if (trimmed === "") {
+          return `<tr><td style="font-size:0;line-height:12px;height:12px;">&nbsp;</td></tr>`
+        }
+        return `<tr><td style="padding:0 0 10px 0;font-size:15px;line-height:1.7;color:#3a3a3a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;mso-line-height-rule:exactly;">${trimmed}</td></tr>`
+      })
+      .join("\n")
 
-    return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Segoe UI',Arial,sans-serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
-    <tr><td align="center" style="padding:24px 16px;">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        ${headerBanner ? `<tr><td style="padding:0;"><img src="${headerBanner}" alt="Header" style="display:block;width:100%;max-width:600px;height:auto;border:0;"/></td></tr>` : ""}
-        <tr><td style="padding:32px 32px 8px;"><h2 style="margin:0;font-size:20px;font-weight:600;color:#111;font-family:'Segoe UI',Arial,sans-serif;">${subject}</h2></td></tr>
-        <tr><td style="padding:16px 32px 32px;">${bodyHtml}</td></tr>
-        ${footerBanner ? `<tr><td style="padding:0;"><img src="${footerBanner}" alt="Footer" style="display:block;width:100%;max-width:600px;height:auto;border:0;"/></td></tr>` : ""}
-      </table>
-    </td></tr>
+    // Preheader = first 120 chars of body (visible in inbox preview)
+    const preheader = body.replace(/\n/g, " ").substring(0, 120).trim()
+
+    return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+  <title>${subject}</title>
+  <!--[if mso]>
+  <noscript><xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml></noscript>
+  <style>
+    table {border-collapse:collapse;}
+    td,th,div,p,a,li,blockquote {font-family:'Segoe UI',Helvetica,Arial,sans-serif;}
+  </style>
+  <![endif]-->
+  <style>
+    /* Client-specific resets */
+    body,#bodyTable{height:100%!important;margin:0;padding:0;width:100%!important}
+    img{-ms-interpolation-mode:bicubic;border:0;outline:none;text-decoration:none}
+    table{border-collapse:collapse!important;mso-table-lspace:0pt;mso-table-rspace:0pt}
+    a[x-apple-data-detectors]{color:inherit!important;font-size:inherit!important;font-weight:inherit!important;line-height:inherit!important;text-decoration:none!important}
+    /* Gmail dark mode */
+    u+#body a{color:inherit;text-decoration:none;font-size:inherit;font-weight:inherit;line-height:inherit}
+    /* Responsive */
+    @media only screen and (max-width:620px){
+      .email-container{width:100%!important;max-width:100%!important}
+      .responsive-pad{padding-left:20px!important;padding-right:20px!important}
+      .stack-col{display:block!important;width:100%!important}
+    }
+    /* Dark mode support */
+    @media (prefers-color-scheme:dark){
+      .email-bg{background-color:#1a1a1a!important}
+      .email-card-bg{background-color:#2a2a2a!important}
+      .email-heading{color:#f0f0f0!important}
+      .email-body-text{color:#d0d0d0!important}
+      .email-divider{border-color:#404040!important}
+    }
+  </style>
+</head>
+<body id="body" class="email-bg" style="margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#f4f4f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;word-spacing:normal;">
+  <!-- Visually hidden preheader -->
+  <div style="display:none;font-size:1px;color:#f4f4f7;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${preheader}${"&zwnj;&nbsp;".repeat(30)}</div>
+
+  <!-- Full-width wrapper -->
+  <table role="presentation" id="bodyTable" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-bg" style="background-color:#f4f4f7;">
+    <tr>
+      <td align="center" valign="top" style="padding:32px 12px;">
+
+        <!-- Email container: 600px max -->
+        <!--[if mso]><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" align="center"><tr><td><![endif]-->
+        <table role="presentation" class="email-container" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;margin:0 auto;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05);" bgcolor="#ffffff">
+
+          ${headerBanner ? `<!-- Header Banner -->
+          <tr>
+            <td style="padding:0;line-height:0;font-size:0;">
+              <img src="${headerBanner}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;outline:none;text-decoration:none;" />
+            </td>
+          </tr>` : ""}
+
+          <!-- Subject heading -->
+          <tr>
+            <td class="responsive-pad" style="padding:${headerBanner ? "28px" : "36px"} 36px 4px 36px;">
+              <h1 class="email-heading" style="margin:0;font-size:20px;font-weight:600;line-height:1.4;color:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;mso-line-height-rule:exactly;">${subject}</h1>
+            </td>
+          </tr>
+
+          <!-- Thin divider -->
+          <tr>
+            <td class="responsive-pad" style="padding:12px 36px 0 36px;">
+              <div class="email-divider" style="border-top:1px solid #eeeeee;font-size:0;line-height:0;">&nbsp;</div>
+            </td>
+          </tr>
+
+          <!-- Body content -->
+          <tr>
+            <td class="responsive-pad" style="padding:20px 36px ${footerBanner ? "24px" : "36px"} 36px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                ${bodyHtml}
+              </table>
+            </td>
+          </tr>
+
+          ${footerBanner ? `<!-- Footer Banner -->
+          <tr>
+            <td style="padding:0;line-height:0;font-size:0;">
+              <img src="${footerBanner}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;outline:none;text-decoration:none;" />
+            </td>
+          </tr>` : ""}
+
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+
+      </td>
+    </tr>
   </table>
 </body>
 </html>`
