@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import {
   Zap, User, Target, MessageSquare, UserCheck, Loader2, CheckCircle2, ArrowRight, ArrowLeft,
   GraduationCap, Briefcase, Compass, Handshake, Rocket, CircleDollarSign, Sparkles,
-  Key, Shield, ChevronRight
+  Key, Shield, ChevronRight, Image as ImageIcon
 } from "lucide-react"
 import {
   Select,
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ApiKeyInput } from "@/components/api-key-input"
+import { EmailBannerSettings } from "@/components/email-banner-settings"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
 
@@ -47,6 +48,12 @@ const steps = [
     description: "Your background & details",
     icon: UserCheck,
   },
+  {
+    id: 4,
+    title: "Branding",
+    description: "Header & footer banners",
+    icon: ImageIcon,
+  },
 ]
 
 export interface FormData {
@@ -55,6 +62,8 @@ export interface FormData {
   background: string
   recipientName: string
   senderName: string
+  headerBanner: string
+  footerBanner: string
 }
 
 export function CraftForm() {
@@ -71,19 +80,23 @@ export function CraftForm() {
     background: "",
     recipientName: "",
     senderName: "",
+    headerBanner: "",
+    footerBanner: "",
   })
 
   const stepContainerRef = useRef<HTMLDivElement>(null)
   const step1Ref = useRef<HTMLDivElement>(null)
   const step2Ref = useRef<HTMLDivElement>(null)
   const step3Ref = useRef<HTMLDivElement>(null)
+  const step4Ref = useRef<HTMLDivElement>(null)
 
-  const stepRefs = [step1Ref, step2Ref, step3Ref]
+  const stepRefs = [step1Ref, step2Ref, step3Ref, step4Ref]
 
   // Validation per step
   const isStep1Valid = !!apiKey
   const isStep2Valid = !!formData.recipient && !!formData.purpose
   const isStep3Valid = !!formData.background && !!formData.senderName
+  const isStep4Valid = true // Step 4 is optional
   const isValid = isStep1Valid && isStep2Valid && isStep3Valid
 
   const canProceed = (step: number) => {
@@ -91,6 +104,7 @@ export function CraftForm() {
       case 1: return isStep1Valid
       case 2: return isStep2Valid
       case 3: return isStep3Valid
+      case 4: return isStep4Valid
       default: return false
     }
   }
@@ -179,7 +193,7 @@ export function CraftForm() {
   }
 
   const handleNext = () => {
-    if (currentStep < 3 && canProceed(currentStep)) {
+    if (currentStep < 4 && canProceed(currentStep)) {
       goToStep(currentStep + 1)
     }
   }
@@ -227,10 +241,10 @@ export function CraftForm() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && !e.shiftKey) {
-        if (currentStep < 3 && canProceed(currentStep)) {
+        if (currentStep < 4 && canProceed(currentStep)) {
           e.preventDefault()
           handleNext()
-        } else if (currentStep === 3 && isValid) {
+        } else if (currentStep === 4 && isValid) {
           e.preventDefault()
           handleSubmit()
         }
@@ -595,6 +609,38 @@ export function CraftForm() {
               </div>
             </div>
           </div>
+
+          {/* ===== STEP 4: Branding ===== */}
+          <div ref={step4Ref} className="p-6 sm:p-8 pt-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500/20 to-pink-500/5 border border-pink-500/20 flex items-center justify-center">
+                  <ImageIcon className="w-4 h-4 text-pink-400" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-white">Add Branding</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Upload banner images for a professional look</p>
+                </div>
+              </div>
+            </div>
+
+            <EmailBannerSettings
+              headerBanner={formData.headerBanner}
+              footerBanner={formData.footerBanner}
+              onHeaderChange={(v) => setFormData({ ...formData, headerBanner: v })}
+              onFooterChange={(v) => setFormData({ ...formData, footerBanner: v })}
+            />
+
+            {/* Skip hint */}
+            {!formData.headerBanner && !formData.footerBanner && (
+              <div className="mt-4 flex items-start gap-3 p-3.5 rounded-xl border border-white/[0.05] bg-white/[0.02]">
+                <Sparkles className="w-4 h-4 text-gray-500 mt-0.5 shrink-0" />
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  This step is <span className="text-white font-medium">completely optional</span>. Your emails will work great without banners too.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Navigation Footer */}
@@ -625,11 +671,11 @@ export function CraftForm() {
                 <p className="text-[11px] text-gray-500 hidden sm:block animate-in fade-in duration-300">
                   {currentStep === 1 && !apiKey && "Add your API key to continue"}
                   {currentStep === 2 && (!formData.recipient || !formData.purpose) && "Fill all fields to continue"}
-                  {currentStep === 3 && (!formData.background || !formData.senderName) && "Complete all fields to generate"}
+                  {currentStep === 3 && (!formData.background || !formData.senderName) && "Complete all fields to continue"}
                 </p>
               )}
 
-              {currentStep < 3 ? (
+              {currentStep < 4 ? (
                 <button
                   onClick={handleNext}
                   disabled={!canProceed(currentStep) || isAnimating}
@@ -640,39 +686,54 @@ export function CraftForm() {
                       : "bg-white/[0.04] text-gray-500 border-white/[0.06] cursor-not-allowed"
                   )}
                 >
-                  Continue
+                  {currentStep === 3 ? "Add Branding" : "Continue"}
                   <ChevronRight className={cn(
                     "w-3.5 h-3.5 transition-transform duration-300",
                     canProceed(currentStep) && "group-hover:translate-x-0.5"
                   )} />
                 </button>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  disabled={isLoading || !isValid}
-                  className={cn(
-                    "flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-medium text-sm transition-all duration-500 border active:scale-[0.98]",
-                    isValid
-                      ? "bg-white text-gray-900 border-white/80 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.15)] hover:scale-[1.01]"
-                      : "bg-white/[0.04] text-gray-500 border-white/[0.06] cursor-not-allowed"
+              ) : currentStep === 4 ? (
+                <div className="flex items-center gap-2">
+                  {/* Skip branding option */}
+                  {!formData.headerBanner && !formData.footerBanner && (
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isLoading || !isValid}
+                      className={cn(
+                        "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border",
+                        "text-gray-400 border-white/[0.06] hover:text-white hover:border-white/[0.1]"
+                      )}
+                    >
+                      Skip & Generate
+                    </button>
                   )}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      Generate My Emails
-                      <ArrowRight className={cn(
-                        "w-4 h-4 transition-transform duration-300",
-                        isValid && "group-hover:translate-x-1"
-                      )} />
-                    </>
-                  )}
-                </button>
-              )}
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isLoading || !isValid}
+                    className={cn(
+                      "flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-medium text-sm transition-all duration-500 border active:scale-[0.98]",
+                      isValid
+                        ? "bg-white text-gray-900 border-white/80 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.15)] hover:scale-[1.01]"
+                        : "bg-white/[0.04] text-gray-500 border-white/[0.06] cursor-not-allowed"
+                    )}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        Generate My Emails
+                        <ArrowRight className={cn(
+                          "w-4 h-4 transition-transform duration-300",
+                          isValid && "group-hover:translate-x-1"
+                        )} />
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

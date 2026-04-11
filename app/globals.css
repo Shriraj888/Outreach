@@ -149,6 +149,39 @@
   }
 }
 
+/* Upload zone animations */
+@keyframes upload-border-dance {
+  0% {
+    background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+  }
+  100% {
+    background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+  }
+}
+
+.upload-zone {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upload-zone:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.upload-zone-active {
+  animation: upload-pulse 1.5s ease-in-out infinite;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  background: rgba(59, 130, 246, 0.05) !important;
+}
+
+@keyframes upload-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
 /* Lenis Recommended Styles */
 html.lenis, html.lenis body {
   height: auto;

@@ -10,6 +10,11 @@ import { GeneratingLoader } from "@/components/generating-loader"
 import { ProTips } from "@/components/pro-tips"
 import type { FormData } from "@/components/craft-form"
 
+interface BannerData {
+  headerBanner: string
+  footerBanner: string
+}
+
 interface EmailVariant {
   subject: string
   body: string
@@ -30,6 +35,7 @@ export default function ResultsPage() {
   const [formData, setFormData] = useState<FormData | null>(null)
   const [apiKey, setApiKey] = useState<string | null>(null)
   const [regenerating, setRegenerating] = useState<Record<string, boolean>>({})
+  const [banners, setBanners] = useState<BannerData>({ headerBanner: "", footerBanner: "" })
   const abortControllerRef = useRef<AbortController | null>(null)
   const regenerateControllersRef = useRef<Record<string, AbortController>>({})
 
@@ -102,6 +108,10 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
     const data = JSON.parse(storedData) as FormData
     setFormData(data)
     setApiKey(storedApiKey)
+    setBanners({
+      headerBanner: data.headerBanner || "",
+      footerBanner: data.footerBanner || "",
+    })
     generateEmails(data, storedApiKey)
   }, [router])
 
@@ -332,6 +342,8 @@ Please modify the email according to the user's instructions while maintaining t
                 color="blue"
                 subject={results.formal.subject}
                 body={results.formal.body}
+                headerBanner={banners.headerBanner}
+                footerBanner={banners.footerBanner}
                 isRegenerating={regenerating.formal}
                 onRegenerate={() => handleRegenerate("formal")}
                 onStopRegenerate={() => handleStopRegeneration("formal")}
@@ -343,6 +355,8 @@ Please modify the email according to the user's instructions while maintaining t
                 color="green"
                 subject={results.casual.subject}
                 body={results.casual.body}
+                headerBanner={banners.headerBanner}
+                footerBanner={banners.footerBanner}
                 isRegenerating={regenerating.casual}
                 onRegenerate={() => handleRegenerate("casual")}
                 onStopRegenerate={() => handleStopRegeneration("casual")}
@@ -354,6 +368,8 @@ Please modify the email according to the user's instructions while maintaining t
                 color="orange"
                 subject={results.bold.subject}
                 body={results.bold.body}
+                headerBanner={banners.headerBanner}
+                footerBanner={banners.footerBanner}
                 isRegenerating={regenerating.bold}
                 onRegenerate={() => handleRegenerate("bold")}
                 onStopRegenerate={() => handleStopRegeneration("bold")}

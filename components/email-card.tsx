@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Copy, Check, RefreshCw, Briefcase, Coffee, Zap, Mail, Send, ChevronDown, ChevronUp, Loader2, Square, Pencil, ArrowUp } from "lucide-react"
+import { Copy, Check, RefreshCw, Briefcase, Coffee, Zap, Mail, Send, ChevronDown, ChevronUp, Loader2, Square, Pencil, ArrowUp, Code2 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { GeneratingLoader } from "@/components/generating-loader"
@@ -15,6 +15,8 @@ interface EmailCardProps {
   color: "blue" | "green" | "orange"
   subject: string
   body: string
+  headerBanner?: string
+  footerBanner?: string
   isRegenerating?: boolean
   onRegenerate: () => void
   onStopRegenerate?: () => void
@@ -59,12 +61,15 @@ export function EmailCard({
   label,
   subject,
   body,
+  headerBanner,
+  footerBanner,
   isRegenerating = false,
   onRegenerate,
   onStopRegenerate,
   onEditSuggestion,
 }: EmailCardProps) {
   const [copied, setCopied] = useState(false)
+  const [copiedHtml, setCopiedHtml] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [mailMenuOpen, setMailMenuOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -134,6 +139,48 @@ export function EmailCard({
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const generateHtmlEmail = () => {
+    const bodyHtml = body.split("\n").map(line => line.trim() === "" ? "<br/>" : `<p style="margin:0 0 12px 0;font-size:15px;line-height:1.7;color:#333;font-family:'Segoe UI',Arial,sans-serif;">${line}</p>`).join("\n")
+
+    return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:'Segoe UI',Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+    <tr><td align="center" style="padding:24px 16px;">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        ${headerBanner ? `<tr><td style="padding:0;"><img src="${headerBanner}" alt="Header" style="display:block;width:100%;max-width:600px;height:auto;border:0;"/></td></tr>` : ""}
+        <tr><td style="padding:32px 32px 8px;"><h2 style="margin:0;font-size:20px;font-weight:600;color:#111;font-family:'Segoe UI',Arial,sans-serif;">${subject}</h2></td></tr>
+        <tr><td style="padding:16px 32px 32px;">${bodyHtml}</td></tr>
+        ${footerBanner ? `<tr><td style="padding:0;"><img src="${footerBanner}" alt="Footer" style="display:block;width:100%;max-width:600px;height:auto;border:0;"/></td></tr>` : ""}
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+  }
+
+  const handleCopyHtml = async () => {
+    const html = generateHtmlEmail()
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html": new Blob([html], { type: "text/html" }),
+          "text/plain": new Blob([`Subject: ${subject}\n\n${body}`], { type: "text/plain" }),
+        })
+      ])
+      setCopiedHtml(true)
+      toast.success("HTML copied! Paste into Gmail compose for full formatting.", { icon: "✨", duration: 4000 })
+      setTimeout(() => setCopiedHtml(false), 2500)
+    } catch {
+      // Fallback to plain text HTML
+      await navigator.clipboard.writeText(html)
+      setCopiedHtml(true)
+      toast.success("HTML source copied to clipboard!", { icon: "📋" })
+      setTimeout(() => setCopiedHtml(false), 2500)
+    }
+  }
+
   const handleMailDirectly = (provider: "gmail" | "outlook" | "yahoo" | "default") => {
     const encSubj = encodeURIComponent(subject)
     const encBody = encodeURIComponent(body)
@@ -147,7 +194,11 @@ export function EmailCard({
 
     window.open(urls[provider], "_blank")
     setMailMenuOpen(false)
-    toast.success(`Draft opened...`)
+    if (headerBanner || footerBanner) {
+      toast.success("Draft opened! Paste the HTML version (Copy HTML) in compose for banners.", { icon: "💡", duration: 5000 })
+    } else {
+      toast.success(`Draft opened...`)
+    }
   }
 
   function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
@@ -307,6 +358,13 @@ export function EmailCard({
             )}
           </AnimatePresence>
 
+        {/* Header Banner */}
+        {headerBanner && (
+          <div className="mb-4 rounded-2xl overflow-hidden border border-white/[0.06] transition-transform duration-500 group-hover:scale-[1.005]">
+            <img src={headerBanner} alt="Email header" className="w-full h-auto block" />
+          </div>
+        )}
+
         {/* Subject */}
         <div ref={subjectRef} className={cn("p-4 rounded-[20px] border mb-6 backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01] shadow-2xl shadow-black/50", config.subjectBg)}>
           <div className="flex items-center gap-2 mb-2">
@@ -341,22 +399,47 @@ export function EmailCard({
           </button>
         </div>
 
-        {/* Actions */}
-        <div ref={actionsRef} className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-auto pt-2 w-full justify-between">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={handleCopy}
-            className={cn(
-              "w-full sm:w-1/2 flex items-center justify-center gap-2 px-4 py-3.5 rounded-[16px] font-medium text-[13px] transition-all duration-300 border",
-              copied
-                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_20px_-4px_rgba(16,185,129,0.3)]"
-                : "bg-white/[0.03] text-gray-300 border-white/[0.06] hover:bg-white/[0.08] hover:text-white"
-            )}
-          >
-            {copied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy Text</>}
-          </motion.button>
+        {/* Footer Banner */}
+        {footerBanner && (
+          <div className="mb-4 rounded-2xl overflow-hidden border border-white/[0.06] transition-transform duration-500 group-hover:scale-[1.005]">
+            <img src={footerBanner} alt="Email footer" className="w-full h-auto block" />
+          </div>
+        )}
 
-          <div ref={mailMenuRef} className="w-full sm:w-1/2 relative">
+        {/* Actions */}
+        <div ref={actionsRef} className="flex flex-col gap-2 mt-auto pt-2 w-full">
+          {/* Copy Row */}
+          <div className="flex gap-2">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCopy}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-[16px] font-medium text-[13px] transition-all duration-300 border",
+                copied
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_20px_-4px_rgba(16,185,129,0.3)]"
+                  : "bg-white/[0.03] text-gray-300 border-white/[0.06] hover:bg-white/[0.08] hover:text-white"
+              )}
+            >
+              {copied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy Text</>}
+            </motion.button>
+
+            {(headerBanner || footerBanner) && (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleCopyHtml}
+                className={cn(
+                  "flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-[16px] font-medium text-[13px] transition-all duration-300 border",
+                  copiedHtml
+                    ? "bg-violet-500/10 text-violet-400 border-violet-500/30 shadow-[0_0_20px_-4px_rgba(139,92,246,0.3)]"
+                    : "bg-white/[0.03] text-gray-300 border-white/[0.06] hover:bg-white/[0.08] hover:text-white"
+                )}
+              >
+                {copiedHtml ? <><Check className="w-4 h-4" /> Copied</> : <><Code2 className="w-4 h-4" /> Copy HTML</>}
+              </motion.button>
+            )}
+          </div>
+
+          <div ref={mailMenuRef} className="w-full relative">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setMailMenuOpen(!mailMenuOpen)}
