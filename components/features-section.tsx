@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, FileEdit, RefreshCcw, Send, Lightbulb, Sparkles, ExternalLink } from "lucide-react"
+import { Bot, FileEdit, RefreshCcw, Send, Lightbulb, Sparkles, ExternalLink, ImagePlus } from "lucide-react"
 import { useRef, type ReactNode } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
@@ -245,10 +245,10 @@ export function FeaturesSection() {
 
           </div>
 
-          {/* Middle Row: Regeneration (Span 1) + Direct Sending (Span 2) */}
+          {/* Middle Row: Regeneration + Email Branding + Direct Sending */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[420px]">
             
-            {/* 3. Mail Regeneration (Span 1) */}
+            {/* 3. Mail Regeneration */}
             <div className="md:col-span-1 h-[400px] md:h-full">
               <BentoCard accentRGB="59,130,246" spotlightSize="sm">
                 <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center z-10 from-blue-500/[0.05] bg-gradient-to-b to-transparent">
@@ -273,35 +273,76 @@ export function FeaturesSection() {
               </BentoCard>
             </div>
 
-            {/* 4. Client Handoff (Span 2) */}
-            <div className="md:col-span-2 h-[400px] md:h-full">
-              <BentoCard accentRGB="34,211,238" spotlightSize="md">
+            {/* 4. Email Branding — Header & Footer Banners (NEW) */}
+            <div className="md:col-span-1 h-[400px] md:h-full">
+              <BentoCard accentRGB="236,72,153" spotlightSize="sm">
+                <div className="absolute inset-x-0 top-0 h-[55%] flex items-center justify-center z-10 bg-gradient-to-b from-pink-500/[0.06] to-transparent">
+                  <div className="relative w-[85%] max-w-[260px] flex flex-col gap-3 group-hover:-translate-y-2 transition-transform duration-500">
+                    {/* Header banner preview */}
+                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-pink-500/20 via-violet-500/20 to-blue-500/20 border border-pink-500/20 flex items-center justify-center gap-2 shadow-[0_4px_20px_-4px_rgba(236,72,153,0.2)]">
+                      <ImagePlus className="w-3.5 h-3.5 text-pink-400" />
+                      <span className="text-[10px] font-semibold text-pink-300 uppercase tracking-wider">Header Banner</span>
+                    </div>
+
+                    {/* Email body mockup */}
+                    <div className="bg-[#0a0a0a]/90 border border-white/10 rounded-2xl p-4 shadow-xl">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 rounded-full bg-pink-500/60" />
+                        <span className="text-[10px] text-white/40 font-medium">Subject line here...</span>
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="h-1.5 bg-white/[0.06] rounded-full w-full" />
+                        <div className="h-1.5 bg-white/[0.06] rounded-full w-[85%]" />
+                        <div className="h-1.5 bg-white/[0.06] rounded-full w-[70%]" />
+                        <div className="h-1.5 bg-white/[0.06] rounded-full w-[90%]" />
+                      </div>
+                    </div>
+
+                    {/* Footer banner preview */}
+                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-blue-500/20 via-violet-500/20 to-pink-500/20 border border-violet-500/20 flex items-center justify-center gap-2 shadow-[0_4px_20px_-4px_rgba(139,92,246,0.2)]">
+                      <ImagePlus className="w-3.5 h-3.5 text-violet-400" />
+                      <span className="text-[10px] font-semibold text-violet-300 uppercase tracking-wider">Footer Banner</span>
+                    </div>
+                  </div>
+                </div>
+                <CardContent
+                  icon={<ImagePlus className="w-5 h-5 text-pink-400" />}
+                  title="Email Branding"
+                  description="Add custom header and footer banners to your emails. Upload branded images that make every outreach look professional and trustworthy."
+                  accentRGB="236,72,153"
+                />
+              </BentoCard>
+            </div>
+
+            {/* 5. Client Handoff */}
+            <div className="md:col-span-1 h-[400px] md:h-full">
+              <BentoCard accentRGB="34,211,238" spotlightSize="sm">
                 <div className="absolute inset-x-0 top-0 h-[55%] flex flex-col items-center justify-center z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-500/[0.08] to-transparent">
                   
-                  <div className="flex flex-col gap-5 bg-[#0a0a0a]/90 border border-white/10 p-6 sm:p-7 rounded-[20px] w-[90%] max-w-[420px] shadow-[0_20px_40px_-10px_rgba(34,211,238,0.1)] group-hover:-translate-y-2 transition-transform duration-500 z-10 relative">
+                  <div className="flex flex-col gap-4 bg-[#0a0a0a]/90 border border-white/10 p-5 rounded-[20px] w-[90%] max-w-[280px] shadow-[0_20px_40px_-10px_rgba(34,211,238,0.1)] group-hover:-translate-y-2 transition-transform duration-500 z-10 relative">
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-[20px] blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                     
                     <div className="flex justify-between items-center relative z-10">
-                      <span className="text-[15px] sm:text-base font-medium text-white/80">Export to Mail Client</span>
-                      <div className="flex gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.15)] transition-colors hover:bg-red-500/20 cursor-default">
-                          <span className="text-[12px] font-bold text-red-400">G</span>
+                      <span className="text-[13px] font-medium text-white/80">Export to Mail</span>
+                      <div className="flex gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.15)]">
+                          <span className="text-[11px] font-bold text-red-400">G</span>
                         </div>
-                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.15)] transition-colors hover:bg-blue-500/20 cursor-default">
-                          <span className="text-[12px] font-bold text-blue-400">O</span>
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.15)]">
+                          <span className="text-[11px] font-bold text-blue-400">O</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="w-full h-[1px] bg-white/10 relative z-10"></div>
 
-                    <div className="flex items-center gap-4 relative z-10">
-                      <div className="w-12 h-12 rounded-[12px] shrink-0 bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
-                        <ExternalLink className="w-6 h-6 text-cyan-400" />
+                    <div className="flex items-center gap-3 relative z-10">
+                      <div className="w-10 h-10 rounded-[10px] shrink-0 bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
+                        <ExternalLink className="w-5 h-5 text-cyan-400" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[15px] sm:text-base text-white/95 font-medium tracking-tight mb-0.5">Draft exported successfully</span>
-                        <span className="text-[12px] sm:text-[13px] text-cyan-400 flex items-center gap-1 font-mono">Redirecting to platform<span className="animate-pulse">...</span></span>
+                        <span className="text-[13px] text-white/95 font-medium tracking-tight mb-0.5">Draft exported</span>
+                        <span className="text-[11px] text-cyan-400 flex items-center gap-1 font-mono">Redirecting<span className="animate-pulse">...</span></span>
                       </div>
                     </div>
                   </div>
@@ -310,9 +351,8 @@ export function FeaturesSection() {
                 <CardContent
                   icon={<ExternalLink className="w-5 h-5 text-cyan-400" />}
                   title="1-Click Client Export"
-                  description="Select your preferred mailing platform natively. We instantly populate the compose window with your AI-generated copy just enter the recipient and hit send."
+                  description="Select your preferred mailing platform natively. We instantly populate the compose window with your AI-generated copy."
                   accentRGB="34,211,238"
-                  wide
                 />
               </BentoCard>
             </div>
