@@ -7,11 +7,12 @@ import { cn } from "@/lib/utils"
 interface ApiKeyInputProps {
   value: string
   onChange: (value: string) => void
+  inline?: boolean
 }
 
 type KeyStatus = "idle" | "checking" | "valid" | "invalid"
 
-export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
+export function ApiKeyInput({ value, onChange, inline = false }: ApiKeyInputProps) {
   const [showKey, setShowKey] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [keyStatus, setKeyStatus] = useState<KeyStatus>("idle")
@@ -79,32 +80,51 @@ export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
 
   if (!isMounted) return null
 
-  return (
-    <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden mb-6">
-      {/* Top accent */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
-
-      <div className="relative p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
-              <Key className="w-5 h-5 text-gray-400" />
+  const innerContent = (
+    <>
+        {/* Header - only show when not inline */}
+        {!inline && (
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+                <Key className="w-5 h-5 text-gray-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-white">API Key</h3>
+                <p className="text-xs text-gray-500">Required to generate emails</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-white">API Key</h3>
-              <p className="text-xs text-gray-500">Required to generate emails</p>
+            <div className="flex gap-2">
+              <a
+                href="https://aistudio.google.com/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.1] bg-white/[0.04]"
+              >
+                Gemini <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+              <a
+                href="https://openrouter.ai/keys"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.1] bg-white/[0.04]"
+              >
+                OpenRouter <ExternalLink className="w-2.5 h-2.5" />
+              </a>
             </div>
           </div>
-          <div className="flex gap-2">
+        )}
+
+        {/* Quick links when inline */}
+        {inline && (
+          <div className="flex gap-2 mb-4">
             <a
               href="https://aistudio.google.com/apikey"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[11px] text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.1] bg-white/[0.04]"
             >
-              Gemini <ExternalLink className="w-2.5 h-2.5" />
+              Get Gemini key <ExternalLink className="w-2.5 h-2.5" />
             </a>
             <a
               href="https://openrouter.ai/keys"
@@ -112,10 +132,10 @@ export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
               rel="noopener noreferrer"
               className="text-[11px] text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.1] bg-white/[0.04]"
             >
-              OpenRouter <ExternalLink className="w-2.5 h-2.5" />
+              Get OpenRouter key <ExternalLink className="w-2.5 h-2.5" />
             </a>
           </div>
-        </div>
+        )}
 
         {/* Input */}
         <div className="relative">
@@ -204,6 +224,21 @@ export function ApiKeyInput({ value, onChange }: ApiKeyInputProps) {
             </span>
           )}
         </div>
+    </>
+  )
+
+  if (inline) {
+    return <div className="relative">{innerContent}</div>
+  }
+
+  return (
+    <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden mb-6">
+      {/* Top accent */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
+
+      <div className="relative p-6">
+        {innerContent}
       </div>
     </div>
   )
