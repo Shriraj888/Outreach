@@ -209,7 +209,7 @@ export function HeroSection() {
         const direction = self.direction === -1 ? -1 : 1
 
         // Boost speed smoothly based on scroll velocity (parallax effect)
-        let velocity = Math.max(0.2, Math.abs(self.getVelocity() / 300))
+        const velocity = Math.max(0.2, Math.abs(self.getVelocity() / 300))
 
         gsap.to(marqueeTween, {
           timeScale: direction * (1 + velocity),

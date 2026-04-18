@@ -3,8 +3,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function ShimmerCards() {
-  const colors = ["blue", "emerald", "orange"]
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {[0, 1, 2].map((index) => (

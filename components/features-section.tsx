@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, FileEdit, RefreshCcw, Send, Lightbulb, Sparkles, ExternalLink, ImagePlus } from "lucide-react"
+import { Bot, FileEdit, RefreshCcw, Lightbulb, Sparkles, ExternalLink, ImagePlus } from "lucide-react"
 import { useRef, type ReactNode } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"

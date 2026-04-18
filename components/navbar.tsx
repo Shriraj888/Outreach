@@ -1,40 +1,26 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Mail, Sparkles, Loader2 } from "lucide-react"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useAnimatedNavigate, useSmoothScroll } from "@/hooks/use-animated-navigate"
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger);
 }
 
 export function Navbar() {
-  const router = useRouter();
   const navContainer = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
-  const [isNavigating, setIsNavigating] = useState(false);
+  const { navigate, isNavigating } = useAnimatedNavigate()
+  const { handleScroll } = useSmoothScroll()
 
   const handleCraftNavigation = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    setIsNavigating(true);
-    
-    // Play a quick satisfying outgoing animation on the entire navbar, then navigate
-    gsap.to(pillRef.current, {
-      scale: 0.95,
-      y: -5,
-      opacity: 0.6,
-      duration: 0.4,
-      ease: "power3.inOut",
-      onComplete: () => {
-        router.push('/craft');
-        // Reset state slightly after routing so it looks normal if user comes back
-        setTimeout(() => setIsNavigating(false), 500);
-      }
-    });
+    navigate('/craft', pillRef);
   };
 
   useGSAP(() => {
@@ -62,15 +48,6 @@ export function Navbar() {
     });
 
   }, { scope: navContainer });
-
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, targetId: string) => {
-    if (window.location.pathname !== '/') return; // Let default navigation happen if not on home page
-    e.preventDefault();
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   return (
     <nav ref={navContainer} className="fixed top-6 left-0 right-0 z-50 px-4 flex justify-center pointer-events-none perspective-1000">

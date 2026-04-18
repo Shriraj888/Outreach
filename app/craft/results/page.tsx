@@ -113,6 +113,11 @@ Return ONLY a JSON object in this exact format, no markdown, no extra text:
       footerBanner: data.footerBanner || "",
     })
     generateEmails(data, storedApiKey)
+
+    // Cleanup: abort any ongoing generation if the component unmounts
+    return () => {
+      abortControllerRef.current?.abort()
+    }
   }, [router])
 
   const handleRegenerate = async (style: "formal" | "casual" | "bold") => {

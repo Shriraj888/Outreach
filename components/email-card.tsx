@@ -9,6 +9,16 @@ import { motion, useMotionTemplate, useMotionValue, AnimatePresence } from "fram
 import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
 
+/** Escapes HTML special characters to prevent XSS in generated email HTML. */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 interface EmailCardProps {
   style: "formal" | "casual" | "bold"
   label: string
@@ -77,13 +87,22 @@ export function EmailCard({
   
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  
+
   const envelopeRef = useRef<HTMLDivElement>(null)
   const mailMenuRef = useRef<HTMLDivElement>(null)
   const editMenuRef = useRef<HTMLDivElement>(null)
   const editInputRef = useRef<HTMLInputElement>(null)
   const config = cardConfig[style]
   const Icon = config.icon
+
+  // Spotlight gradient — declared at hook level (not inside JSX)
+  const spotlightBackground = useMotionTemplate`
+    radial-gradient(
+      400px circle at ${mouseX}px ${mouseY}px,
+      ${config.glowBase}, 0.1),
+      transparent 80%
+    )
+  `
 
   // GSAP element refs for stagger
   const headerRef = useRef(null)
@@ -132,19 +151,26 @@ export function EmailCard({
   }, [editOpen])
 
   const handleCopy = async () => {
-    const fullEmail = `Subject: ${subject}\n\n${body}`
-    await navigator.clipboard.writeText(fullEmail)
-    setCopied(true)
-    toast.success("Ready to paste!", { icon: "🎉" })
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      const fullEmail = `Subject: ${subject}\n\n${body}`
+      await navigator.clipboard.writeText(fullEmail)
+      setCopied(true)
+      toast.success("Ready to paste!", { icon: "🎉" })
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast.error("Failed to copy. Please try again.")
+    }
   }
 
   const generateHtmlEmail = () => {
+    // Escape subject to prevent XSS in HTML output
+    const safeSubject = escapeHtml(subject)
+
     // Process body into email-safe paragraphs with proper spacing
     const bodyHtml = body
       .split("\n")
       .map((line) => {
-        const trimmed = line.trim()
+        const trimmed = escapeHtml(line.trim())
         if (trimmed === "") {
           return `<tr><td style="font-size:0;line-height:12px;height:12px;">&nbsp;</td></tr>`
         }
@@ -223,7 +249,7 @@ export function EmailCard({
           <!-- Subject heading -->
           <tr>
             <td class="responsive-pad" style="padding:${headerBanner ? "28px" : "36px"} 36px 4px 36px;">
-              <h1 class="email-heading" style="margin:0;font-size:20px;font-weight:600;line-height:1.4;color:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;mso-line-height-rule:exactly;">${subject}</h1>
+              <h1 class="email-heading" style="margin:0;font-size:20px;font-weight:600;line-height:1.4;color:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;mso-line-height-rule:exactly;">${safeSubject}</h1>
             </td>
           </tr>
 
@@ -340,15 +366,7 @@ export function EmailCard({
       {/* Dynamic Hover Spotlight */}
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-[28px] opacity-0 transition duration-500 group-hover:opacity-100"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(
-              400px circle at ${mouseX}px ${mouseY}px,
-              ${config.glowBase}, 0.1),
-              transparent 80%
-            )
-          `,
-        }}
+        style={{ background: spotlightBackground }}
       />
 
       {/* Top Ambient Glow */}

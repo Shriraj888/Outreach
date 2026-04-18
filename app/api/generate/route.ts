@@ -120,16 +120,16 @@ export async function POST(request: NextRequest) {
             { error: "AI returned an unparseable response. Please try again." },
             { status: 500 }
           )
-        } catch (err: any) {
-          const statusCode = err?.statusCode ?? err?.status
+        } catch (err: unknown) {
+          const statusCode = (err as Record<string, unknown>)?.statusCode ?? (err as Record<string, unknown>)?.status
           if (statusCode === 429 || statusCode === 503) {
             if (attempt < 2) { await delay(2000); continue }
           }
-          const msg = err?.message ?? "Unknown error"
+          const msg = err instanceof Error ? err.message : "Unknown error"
           if (statusCode === 401 || statusCode === 403) {
             return NextResponse.json({ error: "Invalid Gemini API key. Please check your key." }, { status: 401 })
           }
-          return NextResponse.json({ error: `Generation failed: ${msg.substring(0, 200)}` }, { status: statusCode ?? 500 })
+          return NextResponse.json({ error: `Generation failed: ${msg.substring(0, 200)}` }, { status: typeof statusCode === 'number' ? statusCode : 500 })
         }
       }
     }
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    let lastError: any = null
+    let lastError: unknown = null
 
     for (const modelId of OPENROUTER_MODELS) {
       const model = openrouter(modelId)
@@ -187,10 +187,10 @@ export async function POST(request: NextRequest) {
         lastError = new Error("Incomplete JSON from model")
         continue
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         lastError = err
-        const errMsg = err?.message ?? ""
-        const statusCode = err?.statusCode ?? err?.status
+        const errMsg = err instanceof Error ? err.message : ""
+        const statusCode = ((err as Record<string, unknown>)?.statusCode ?? (err as Record<string, unknown>)?.status) as number | undefined
 
         console.error(`✗ ${modelId} failed:`, errMsg.substring(0, 100), "Status:", statusCode)
 
@@ -222,10 +222,10 @@ export async function POST(request: NextRequest) {
     }
 
     // All models exhausted
-    console.error("All OpenRouter models failed. Last error:", lastError?.message)
+    console.error("All OpenRouter models failed. Last error:", lastError instanceof Error ? lastError.message : lastError)
 
-    const errorMessage = lastError?.message ?? "Unknown error"
-    const statusCode = lastError?.statusCode ?? lastError?.status ?? 500
+    const errorMessage = lastError instanceof Error ? lastError.message : "Unknown error"
+    const statusCode = (lastError as Record<string, unknown>)?.statusCode ?? (lastError as Record<string, unknown>)?.status ?? 500
 
     if (statusCode === 429 || errorMessage.includes("Too Many Requests") || errorMessage.includes("rate") || errorMessage.includes("quota")) {
       return NextResponse.json(
@@ -238,7 +238,7 @@ export async function POST(request: NextRequest) {
       { error: `Generation failed: ${errorMessage.substring(0, 200)}` },
       { status: 500 }
     )
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("API route unexpected error:", error)
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },

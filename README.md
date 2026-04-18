@@ -70,7 +70,8 @@ generateText() via Vercel AI SDK
     ↓
 extractJSON() → strips markdown fences, finds JSON anywhere in response
     ↓
-3× exponential backoff (5s / 10s / 15s) on failure
+Gemini: 2 attempts with 1s / 2s retry on rate-limit
+OpenRouter: sequential fallback across 4 models (paid → free)
     ↓
 3 email variants + Pro Tips returned
 ```

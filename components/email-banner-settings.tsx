@@ -178,7 +178,9 @@ function UploadZone({ label, sublabel, value, onChange, icon, accentColor }: Upl
         className={cn(
           "upload-zone relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 py-8 cursor-pointer transition-all duration-300",
           isDragging
-            ? `border-${accentColor}-500/40 bg-${accentColor}-500/5 scale-[1.01]`
+            ? accentColor === "blue"
+              ? "border-blue-500/40 bg-blue-500/5 scale-[1.01]"
+              : "border-violet-500/40 bg-violet-500/5 scale-[1.01]"
             : error
               ? "border-red-500/20 bg-red-500/[0.03]"
               : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.04]",

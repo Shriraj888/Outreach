@@ -1,15 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Github, Linkedin, Loader2, ArrowUpRight, Mail } from "lucide-react"
-import { useState } from "react"
+import { useAnimatedNavigate, useSmoothScroll } from "@/hooks/use-animated-navigate"
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/shriraj888", label: "GitHub" },
   { icon: Linkedin, href: "https://www.linkedin.com/in/shriraj-patil888/", label: "LinkedIn" },
   { 
-    icon: (props: any) => (
+    icon: (props: React.SVGProps<SVGSVGElement>) => (
       <svg className={props.className} viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
       </svg>
@@ -20,36 +19,16 @@ const socialLinks = [
 ]
 
 export function Footer() {
-  const router = useRouter()
-  const [isNavigating, setIsNavigating] = useState(false)
+  const { navigate, isNavigating } = useAnimatedNavigate()
+  const { handleScroll, handleScrollToHome } = useSmoothScroll()
   
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, targetId: string) => {
-    if (window.location.pathname !== '/') return; 
-    e.preventDefault();
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const handleScrollToHome = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (window.location.pathname === '/') {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
   const handleCraftNavigation = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    setIsNavigating(true);
-    router.push('/craft');
-    setTimeout(() => {
-      setIsNavigating(false);
-    }, 500);
+    navigate('/craft');
   };
 
   return (

@@ -71,9 +71,25 @@ const steps = [
   },
 ]
 
-function StepCard({ step, index, hoveredIdx, setHoveredIdx }: any) {
+interface StepCardProps {
+  step: (typeof steps)[number]
+  index: number
+  hoveredIdx: number | null
+  setHoveredIdx: (idx: number | null) => void
+}
+
+function StepCard({ step, index, hoveredIdx, setHoveredIdx }: StepCardProps) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
+
+  // Spotlight gradient — declared at hook level (not inside JSX)
+  const spotlightBackground = useMotionTemplate`
+    radial-gradient(
+      400px circle at ${mouseX}px ${mouseY}px,
+      ${step.glowBase}, 0.12),
+      transparent 80%
+    )
+  `
 
   function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
     const { left, top } = currentTarget.getBoundingClientRect()
@@ -114,15 +130,7 @@ function StepCard({ step, index, hoveredIdx, setHoveredIdx }: any) {
       {/* Dynamic Hover Spotlight */}
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition duration-500 group-hover:opacity-100"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(
-              400px circle at ${mouseX}px ${mouseY}px,
-              ${step.glowBase}, 0.12),
-              transparent 80%
-            )
-          `,
-        }}
+        style={{ background: spotlightBackground }}
       />
 
       {/* Top Ambient Glow Line */}

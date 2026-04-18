@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import {
-  Zap, User, Target, MessageSquare, UserCheck, Loader2, CheckCircle2, ArrowRight, ArrowLeft,
+  User, Target, MessageSquare, UserCheck, Loader2, CheckCircle2, ArrowRight, ArrowLeft,
   GraduationCap, Briefcase, Compass, Handshake, Rocket, CircleDollarSign, Sparkles,
   Key, Shield, ChevronRight, Image as ImageIcon
 } from "lucide-react"
@@ -69,7 +69,6 @@ export interface FormData {
 export function CraftForm() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
-  const [direction, setDirection] = useState<"forward" | "backward">("forward")
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [apiKey, setApiKey] = useState("")
@@ -187,7 +186,6 @@ export function CraftForm() {
     if (step > currentStep && !canProceed(currentStep)) return
 
     const dir = step > currentStep ? "forward" : "backward"
-    setDirection(dir)
     animateStepTransition(currentStep, step, dir)
     setCurrentStep(step)
   }
@@ -265,7 +263,6 @@ export function CraftForm() {
             {steps.map((step, index) => {
               const Icon = step.icon
               const isActive = currentStep === step.id
-              const isCompleted = currentStep > step.id || (step.id === 1 && isStep1Valid && currentStep > 1) || (step.id === 2 && isStep2Valid && currentStep > 2)
               const isPast = currentStep > step.id
               const isClickable = step.id < currentStep || (step.id === currentStep) || (step.id === currentStep + 1 && canProceed(currentStep))
 
