@@ -48,31 +48,24 @@ No account. No subscription. No setup. Just results.
 ## Data Flow
 
 ```mermaid
-sequenceDiagram
-    participant User
-    participant Browser as React Client (Browser)
-    participant Storage as localStorage
-    participant API as Next.js API (/api/generate)
-    participant AI as AI Provider (Gemini / OpenRouter)
+flowchart TD
+    A([👤 User]) -->|Fills form + enters API key| B[🌐 Browser]
+    B -->|Stores key & form data| C[(localStorage)]
+    C -->|Reads data on results page| B
 
-    User->>Browser: Enters API Key & context details
-    Browser->>Storage: Persists form data & API key locally
-    Browser->>Browser: Navigates to /craft/results
-    Browser->>Storage: Retrieves form data & API key
+    B -->|POST /api/generate| D[⚙️ Next.js API Route]
 
-    Browser->>API: POST /api/generate
-    Note over API: Validates key format & detects provider
+    D -->|Key starts with AIza...| E[🤖 Gemini\ngemini-2.5-flash]
+    D -->|Key starts with sk-or-...| F[🤖 OpenRouter\ngemma-3-27b-it]
 
-    alt Key starts with "AIza"
-        API->>AI: Google Generative AI (gemini-2.5-flash)
-    else Key starts with "sk-or-"
-        API->>AI: OpenRouter (gemma-3-27b-it + fallbacks)
-    end
+    E -->|Rate limited? Retry up to 2×| E
+    F -->|Model fails? Try next fallback| F
 
-    AI-->>API: Returns JSON response
-    Note over API: extractJSON() parses & structures output
-    API-->>Browser: 3 email variants + Pro Tips
-    Browser-->>User: Renders email cards with full controls
+    E -->|JSON response| G[🔍 extractJSON]
+    F -->|JSON response| G
+
+    G -->|3 email variants + Pro Tips| B
+    B -->|Renders results| H([📧 Email Cards])
 ```
 
 ---
@@ -235,4 +228,4 @@ function extractJSON(text: string) {
 
 ---
 
-*Scaffolded with [v0.dev](https://v0.dev) · Deployed on [Vercel](https://vercel.com)*
+*Deployed on [Vercel](https://vercel.com)*
