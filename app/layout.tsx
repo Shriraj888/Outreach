@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Outreach - Cold Emails That Actually Get Replies',
     description: 'Generate 3 unique cold email styles with AI. No account needed.',
-    url: 'https://v0-outreach-app.vercel.app',
+    url: 'https://outreach-copilot.vercel.app',
     siteName: 'Outreach',
     type: 'website',
     locale: 'en_US',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'Outreach - Cold Emails That Actually Get Replies',
     description: 'Generate 3 unique cold email styles with AI. No account needed.',
   },
-  metadataBase: new URL('https://v0-outreach-app.vercel.app'),
+  metadataBase: new URL('https://outreach-copilot.vercel.app'),
   robots: { index: true, follow: true },
 }
 
